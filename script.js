@@ -107,25 +107,20 @@ async function searchMusic(override, autoPlayFirst = false){
   message(`Loading tracks…`);
 
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
-
-    const url = `${API_BASE}/search?q=${encodeURIComponent(q)}&limit=15&api_key=${encodeURIComponent(API_KEY)}`;
-    const res = await fetch(url, { signal: controller.signal });
-    clearTimeout(timeoutId);
-
+    const url = `https://saavn.dev/api/search/songs?query=${encodeURIComponent(q)}&page=1&limit=15`;
+    const res = await fetch(url);
     if(!res.ok) throw Error('API Error');
     const data = await res.json();
     if(thisSearch !== searchNumber) return;
-    const found = data.result || data.tracks || data.results || [];
     
+    const found = data?.data?.results || [];
     if(Array.isArray(found) && found.length > 0){
       tracks = found;
     } else {
       tracks = BACKUP_TRACKS;
     }
   } catch(e) {
-    console.warn('API down/blocked, loading backup tracks:', e);
+    console.warn('Network issue, using backup tracks:', e);
     tracks = BACKUP_TRACKS;
   } finally {
     busy = false;
@@ -144,7 +139,7 @@ async function playSong(index){
   updatePlayer();
 
   try {
-    const streamUrl = getDownloadUrl(targetOf(t), false);
+    const streamUrl = getAudioStream(t);
     audio.pause();
     audio.src = streamUrl;
     audio.load();
@@ -479,4 +474,3 @@ window.addEventListener('DOMContentLoaded', () => {
   refreshUserUI();
   searchMusic('Hindi trending hits', true);
 });
-  
