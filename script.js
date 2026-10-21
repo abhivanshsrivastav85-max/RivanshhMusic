@@ -613,4 +613,20 @@ window.addEventListener('DOMContentLoaded', () => {
   refreshUserUI();
   searchMusic('Hindi trending hits', true);
 });
-    
+    // Theme Picker Setup & LocalStorage Auto-save
+const savedTheme = localStorage.getItem('riv_theme') || 'default';
+document.documentElement.setAttribute('data-theme', savedTheme);
+
+document.querySelectorAll('.theme-dot').forEach(dot => {
+  if(dot.dataset.t === savedTheme) dot.classList.add('active');
+  else dot.classList.remove('active');
+
+  dot.addEventListener('click', () => {
+    document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+    dot.classList.add('active');
+    const theme = dot.dataset.t;
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('riv_theme', theme);
+  });
+});
+
