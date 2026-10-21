@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#080b12">
+<title>RIVANSHH Hub</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" id="mainLogo">♫</div>
+      <div>
+        <h1 id="brandTitle">RIVANSHH MUSIC</h1>
+        <small id="brandSub">YOUR SOUNDTRACK</small>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div id="premBadge" class="badge-prem hidden">👑 PREMIUM</div>
+      <button class="circle-btn" id="accountBtn" title="Account">👤</button>
+      <button class="circle-btn" id="openPlayer">♫</button>
+    </div>
+  </header>
+
+  <!-- Dual Mode Selection Covers -->
+  <div class="portal-selector">
+    <div class="portal-card music-active" id="btnModeMusic">
+      <div class="portal-badge">🎧</div>
+      <h4>RIVANSHH MUSIC</h4>
+      <p>Spotify Experience & Autoplay</p>
+    </div>
+    <div class="portal-card" id="btnModeTube">
+      <div class="portal-badge">▶️</div>
+      <h4>RIVANSHHTUBE</h4>
+      <p>YouTube Experience & Videos</p>
+    </div>
+  </div>
+
+  <!-- Music / Tube Main View -->
+  <main id="homePage">
+    <div class="search" id="searchBox">
+      <span>⌕</span>
+      <input id="query" type="search" placeholder="Search songs or artists..." autocomplete="off">
+      <button id="searchBtn">Search</button>
+    </div>
+    <div class="chips" id="chipsContainer">
+      <button class="chip active" data-q="Hindi trending hits">Hindi</button>
+      <button class="chip" data-q="Bollywood hits">Bollywood</button>
+      <button class="chip" data-q="Romantic songs">Romantic</button>
+      <button class="chip" data-q="Arijit Singh">Arijit Singh</button>
+      <button class="chip" data-q="Punjabi hits">Punjabi</button>
+    </div>
+    <div class="section-head">
+      <h3 id="heading">Discover Music</h3>
+      <span id="count"></span>
+    </div>
+    <div class="results" id="results"><p class="msg">Loading tracks…</p></div>
+  </main>
+
+  <!-- Library Page (Playlists & Liked Songs) -->
+  <main id="libraryPage" class="hidden">
+    <div class="library-tabs">
+      <button class="lib-pill active" id="tabPlaylists">Playlists</button>
+      <button class="lib-pill" id="tabLiked">Liked Songs (❤️)</button>
+      <button class="lib-pill" id="tabRecent">Recent</button>
+    </div>
+
+    <!-- Playlists Container -->
+    <div id="viewPlaylists">
+      <button class="btn-create-pl" id="btnCreatePl">+ Create New Playlist (👑 Premium)</button>
+      <div id="playlistList" class="results"></div>
+    </div>
+
+    <!-- Liked Songs Container -->
+    <div id="viewLiked" class="hidden">
+      <div id="likedList" class="results"><p class="msg">No liked songs yet.</p></div>
+    </div>
+
+    <!-- Recently Played Container -->
+    <div id="viewRecent" class="hidden">
+      <div id="libraryList" class="results"><p class="msg">Songs you play will appear here.</p></div>
+    </div>
+  </main>
+</div>
+
+<!-- Bottom Mini Player -->
+<div class="dock hidden" id="dock">
+  <div class="dock-top">
+    <img class="mini-cover" id="miniCover" alt="">
+    <div class="mini-info" id="miniOpen">
+      <b id="miniTitle">Nothing playing</b>
+      <small id="miniArtist">Choose a song</small>
+    </div>
+    <button id="prev">⏮</button>
+    <button class="green" id="miniPlay">▶</button>
+    <button id="next">⏭</button>
+  </div>
+  <div class="progress"><div class="progress-fill" id="fill"></div></div>
+</div>
+
+<!-- Bottom Navigation Bar -->
+<nav class="bottom-nav">
+  <button class="nav active" id="homeTab"><span>⌂</span>Home</button>
+  <button class="nav" id="searchTab"><span>⌕</span>Search</button>
+  <button class="nav" id="libraryTab"><span>▤</span>Library</button>
+</nav>
+
+<!-- Full Player Modal -->
+<div class="full hidden" id="full">
+  <div class="full-head">
+    <button class="circle-btn" id="closeFull">⌄</button>
+    <small>NOW PLAYING</small>
+    <button class="circle-btn" id="fullLikeBtn">♡</button>
+  </div>
+  <img class="big-cover" id="bigCover" alt="Album artwork">
+  <div class="full-title" id="bigTitle">Choose a song</div>
+  <div class="full-artist" id="bigArtist">RIVANSHH MUSIC</div>
+  <div class="full-album" id="bigAlbum">Album information</div>
+  <input class="seek" id="seek" type="range" min="0" max="1000" value="0">
+  <div class="times"><span id="elapsed">0:00</span><span id="duration">0:00</span></div>
+  <div class="controls">
+    <button id="fullPrev">⏮</button>
+    <button class="big-play" id="fullPlay">▶</button>
+    <button id="fullNext">⏭</button>
+  </div>
+  <div class="full-actions">
+    <button class="full-btn" id="fullAddToPlBtn">➕ Add to Playlist</button>
+    <button class="full-btn" id="fullDlBtn">⬇ Download (👑)</button>
+  </div>
+  <div class="volume"><span>◖</span><input id="volume" type="range" min="0" max="100" value="100"><span>◗</span></div>
+  <p class="notice" id="notice">Enjoy your music with RIVANSHH.</p>
+</div>
+
+<!-- Account Modal (Login / Signup / Profile) -->
+<div class="modal-overlay hidden" id="accountModal">
+  <div class="modal-content">
+    <button class="btn-close" id="closeAccountModal">✕</button>
+    <div id="authLoggedOut">
+      <h3>Welcome to RIVANSHH</h3>
+      <p>Sign in to sync your playlists & liked songs.</p>
+      <div class="form-group">
+        <label>Username / Name</label>
+        <input type="text" id="authName" placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="authEmail" placeholder="name@email.com">
+      </div>
+      <button class="btn-primary" id="btnSaveAccount">Sign In / Register</button>
+    </div>
+    <div id="authLoggedIn" class="hidden">
+      <h3>My Account</h3>
+      <p id="accountInfoText">Logged in user</p>
+      <div style="margin: 18px 0;">
+        <span style="font-size:12px;color:var(--muted)">Account Tier:</span>
+        <b id="accountTierText" style="color:var(--gold);margin-left:5px">FREE</b>
+      </div>
+      <button class="btn-primary btn-gold" id="btnOpenPremiumFromAcc" style="margin-bottom:10px">👑 Upgrade to Premium</button>
+      <button class="btn-primary" id="btnLogout" style="background:#263244;color:#fff">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- Real UPI QR Code & Premium Modal -->
+<div class="modal-overlay hidden" id="premiumModal">
+  <div class="modal-content" style="border-color:var(--gold);max-height:90vh;overflow-y:auto">
+    <button class="btn-close" id="closePremiumModal">✕</button>
+    <div style="text-align:center">
+      <h3 style="color:var(--gold)">👑 RIVANSHH VIP PASS</h3>
+      <p style="margin-bottom:12px">Scan QR code using any UPI App (GPay, PhonePe, Paytm)</p>
+      
+      <!-- Generated Dynamic UPI QR Code Image -->
+      <div style="background:#fff;padding:10px;border-radius:15px;display:inline-block;margin-bottom:10px">
+        <img id="upiQrImg" src="" alt="Scan & Pay ₹29" style="width:170px;height:170px;display:block">
+      </div>
+
+      <div style="font-size:20px;font-weight:bold;color:#28e07c;margin-bottom:6px">Amount: ₹29 Only</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">UPI ID: <span id="displayUpiId" style="color:#fff"></span></div>
+
+      <!-- Direct Pay button for Mobile Users -->
+      <a id="btnDirectUpiApp" href="#" class="btn-primary" style="display:block;text-decoration:none;margin-bottom:15px;background:#28e07c;color:#06140c;font-weight:bold">
+        ⚡ Pay Directly via UPI App
+      </a>
+
+      <!-- Instant Activation / Verification Box -->
+      <div style="background:#080c13;padding:12px;border-radius:12px;border:1px solid var(--border);text-align:left">
+        <label style="font-size:11px;color:#c4d4db;display:block;margin-bottom:6px">Enter UTR / UPI Ref No. or Code:</label>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="txnInput" placeholder="12-digit UTR or Code" style="flex:1;background:#121a26;border:1px solid var(--border);color:#fff;padding:8px;border-radius:8px;font-size:12px">
+          <button id="btnVerifyPay" class="btn-primary btn-gold" style="width:auto;padding:8px 14px;font-size:12px">Activate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Song to Playlist Picker Modal -->
+<div class="modal-overlay hidden" id="addToPlModal">
+  <div class="modal-content">
+    <button class="btn-close" id="closeAddToPl">✕</button>
+    <h3>Add to Playlist</h3>
+    <p>Select which playlist to add this track to:</p>
+    <div id="plChoiceList" class="results" style="max-height:220px;overflow-y:auto;margin-bottom:15px"></div>
+  </div>
+</div>
+
+<!-- YouTube Video Modal -->
+<div class="yt-player-modal hidden" id="ytModal">
+  <button class="close-yt" id="closeYt">✕ Close</button>
+  <div class="yt-player-wrap">
+    <iframe id="ytIframe" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+
+<audio id="audio" preload="auto" playsinline webkit-playsinline></audio>
+
+<script>
+'use strict';
+/* ===================================================
+   👇 YAHAN APNI UPI ID AUR NAAM CHANGE KAR LO 👇
+=================================================== */
+const MY_UPI_ID = 'anurag1983@fam'; // PhonePe / GPay / Paytm /Fampay UPI ID
+const MY_UPI_NAME = 'RIVANSHH MUSIC';
+const AMOUNT = 00;
+/* =================================================== */
+
+const API_BASE = 'https://api.riteshyt.in';
+const API_KEY = 'riteshfree900bfd96adabe73bae45f2a7';
+const $ = id => document.getElementById(id);
+const audio = $('audio');
+const fallbackArt = 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><defs><linearGradient id="g"><stop stop-color="#135c4b"/><stop offset="1" stop-color="#15263f"/></linearGradient></defs><rect width="300" height="300" rx="25" fill="url(#g)"/><text x="150" y="185" font-size="115" text-anchor="middle" fill="#39ed9a">♫</text></svg>');
+
+let currentUser = JSON.parse(localStorage.getItem('riv_user') || 'null');
+let playlists = JSON.parse(localStorage.getItem('riv_playlists') || '[]');
+let likedSongs = JSON.parse(localStorage.getItem('riv_liked') || '[]');
+let library = JSON.parse(localStorage.getItem('riv_recent') || '[]');
+
+let currentMode = 'music';
+let tracks = [], currentIndex = -1, busy = false, searchNumber = 0;
+let hasUserInteracted = false;
+let trackToAdd = null;
+
+function saveState(){
+  localStorage.setItem('riv_user', JSON.stringify(currentUser));
+  localStorage.setItem('riv_playlists', JSON.stringify(playlists));
+  localStorage.setItem('riv_liked', JSON.stringify(likedSongs));
+  localStorage.setItem('riv_recent', JSON.stringify(library));
+  refreshUserUI();
+}
+
+function refreshUserUI(){
+  if(currentUser && currentUser.isPremium){
+    $('premBadge').classList.remove('hidden');$('accountTierText').textContent = 'VIP PREMIUM 👑';
+  } else {
+    $('premBadge').classList.add('hidden');$('accountTierText').textContent = 'FREE TIER';
+  }
+}
+
+function text(v, f=''){return typeof v==='string'||typeof v==='number'?String(v):f}
+function titleOf(t){return text(t.title,'Unknown Title')}
+function artistOf(t){return text(t.channel||t.artist||t.author,'Unknown Artist')}
+function targetOf(t){return t.id||t.link||t.url||titleOf(t)}
+function timeOf(s){if(!Number.isFinite(s)||s<0)return'0:00';return Math.floor(s/60)+':'+Math.floor(s%60).toString().padStart(2,'0')}
+function artOf(t){
+  const x = t.albumArt||t.thumbnail||t.thumbnails||t.image;
+  if(typeof x==='string'&&/^https?:\/\//i.test(x)) return x;
+  if(Array.isArray(x)){const a = x.find(v=>v&&typeof v.url==='string'&&/^https?:\/\//i.test(v.url)); if(a) return a.url;}
+  return fallbackArt;
+}
+function safeImage(img, src){img.onerror=()=>{img.onerror=null;img.src=fallbackArt};img.src=src||fallbackArt}
+function message(msg, error=false){
+  const p=document.createElement('p');p.className='msg'+(error?' error':'');p.textContent=msg;$('results').replaceChildren(p);
+}
+
+function isSongLiked(track){
+  return likedSongs.some(s => targetOf(s) === targetOf(track));
+}
+
+function toggleLike(track){
+  if(isSongLiked(track)){
+    likedSongs = likedSongs.filter(s => targetOf(s) !== targetOf(track));
+  } else {
+    likedSongs.unshift(track);
+  }
+  saveState();
+  if(currentIndex >= 0) updatePlayer();
+  renderLikedSongs();
+  renderTracks();
+}
+
+function getDownloadUrl(target, isVideo = false) {
+  const type = isVideo ? 'video' : 'audio';
+  const ext = isVideo ? 'mp4' : 'mp3';
+  return `${API_BASE}/download?query=${encodeURIComponent(target)}&dl_type=${type}&ext=${ext}&api_key=${encodeURIComponent(API_KEY)}`;
+}
+
+function checkPremiumAccess(actionCallback){
+  if(currentUser && currentUser.isPremium){
+    actionCallback();
+  } else {
+    openPaymentModal();
+  }
+}
+
+function openPaymentModal(){
+  const upiUrl = `upi://pay?pa=${MY_UPI_ID}&pn=${encodeURIComponent(MY_UPI_NAME)}&am=${AMOUNT}&cu=INR&tn=Rivanshh_VIP_Pass`;
+  const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUrl)}`;
+  
+  $('upiQrImg').src = qrApi;
+  $('displayUpiId').textContent = MY_UPI_ID;
+  $('btnDirectUpiApp').href = upiUrl;
+  $('premiumModal').classList.remove('hidden');
+}
+
+function makeMusicCard(track, index, listContext = tracks){
+  const card = document.createElement('div'); card.className = 'track';
+  const img = document.createElement('img'); img.className = 'cover'; img.alt = 'Artwork'; safeImage(img, artOf(track));
+  const info = document.createElement('div'); info.className = 'info';
+  const title = document.createElement('div'); title.className = 'title'; title.textContent = titleOf(track);
+  const artist = document.createElement('div'); artist.className = 'artist'; artist.textContent = artistOf(track);
+  info.append(title, artist);
+
+  const actions = document.createElement('div'); actions.className = 'track-actions';
+  
+  const likeBtn = document.createElement('button');
+  const liked = isSongLiked(track);
+  likeBtn.className = `action-btn ${liked ? 'liked' : ''}`;
+  likeBtn.textContent = liked ? '❤️' : '♡';
+  likeBtn.onclick = (e) => { e.stopPropagation(); toggleLike(track); };
+
+  const plBtn = document.createElement('button');
+  plBtn.className = 'action-btn';
+  plBtn.textContent = '＋';
+  plBtn.title = 'Add to Playlist';
+  plBtn.onclick = (e) => {
+    e.stopPropagation();
+    checkPremiumAccess(() => openAddToPlaylistModal(track));
+  };
+
+  const dlBtn = document.createElement('button');
+  dlBtn.className = `action-btn ${currentUser?.isPremium ? '' : 'lock-icon'}`;
+  dlBtn.textContent = currentUser?.isPremium ? '⬇' : '🔒';
+  dlBtn.title = 'Download MP3';
+  dlBtn.onclick = (e) => {
+    e.stopPropagation();
+    checkPremiumAccess(() => {
+      window.open(getDownloadUrl(targetOf(track), false), '_blank');
+    });
+  };
+
+  const playBtn = document.createElement('button');
+  playBtn.className = 'action-btn play-btn';
+  playBtn.textContent = '▶';
+  playBtn.onclick = () => {
+    tracks = listContext;
+    playSong(index);
+  };
+
+  actions.append(likeBtn, plBtn, dlBtn, playBtn);
+  card.append(img, info, actions);
+  return card;
+}
+
+function makeTubeCard(track){
+  const card = document.createElement('div'); card.className = 'yt-card';
+  const target = targetOf(track);
+  const videoId = track.id || (typeof target==='string' && target.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/)?.[1]) || target;
+
+  const thumbWrap = document.createElement('div'); thumbWrap.className = 'yt-thumb-wrap';
+  const thumb = document.createElement('img'); thumb.className = 'yt-thumb'; safeImage(thumb, artOf(track));
+  const playIcon = document.createElement('div'); playIcon.className = 'yt-play-badge'; playIcon.textContent = '▶';
+  thumbWrap.append(thumb, playIcon);
+  thumbWrap.onclick = () => openVideoPlayer(videoId);
+
+  const meta = document.createElement('div'); meta.className = 'yt-meta';
+  const textDiv = document.createElement('div'); textDiv.className = 'yt-text';
+  const title = document.createElement('div'); title.className = 'yt-title'; title.textContent = titleOf(track);
+  const channel = document.createElement('div'); channel.className = 'yt-channel'; channel.textContent = artistOf(track);
+  textDiv.append(title, channel);
+
+  const dl = document.createElement('button');
+  dl.className = 'yt-dl-btn';
+  dl.innerHTML = currentUser?.isPremium ? '⬇ MP4' : '🔒 MP4';
+  dl.onclick = () => {
+    checkPremiumAccess(() => {
+      window.open(getDownloadUrl(target, true), '_blank');
+    });
+  };
+
+  meta.append(textDiv, dl);
+  card.append(thumbWrap, meta);
+  return card;
+}
+
+function openVideoPlayer(id) {
+  audio.pause();
+  $('ytIframe').src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+  $('ytModal').classList.remove('hidden');
+}
+
+$('closeYt').onclick = () => {
+  $('ytIframe').src = '';$('ytModal').classList.add('hidden');
+};
+
+function renderTracks(){
+  if(!tracks.length){ message('No results found.'); return; }
+  const frag = document.createDocumentFragment();
+  tracks.forEach((t, i) => {
+    if(currentMode === 'music') frag.appendChild(makeMusicCard(t, i, tracks));
+    else frag.appendChild(makeTubeCard(t));
+  });
+  $('results').replaceChildren(frag);$('count').textContent = tracks.length + (currentMode==='music'?' songs':' videos');
+}
+
+async function searchMusic(override, autoPlayFirst = false){
+  const q = (override || $('query').value).trim();
+  if(!q || busy) return;
+  busy = true; const thisSearch = ++searchNumber;
+  message(`Searching ${currentMode === 'music' ? 'tracks' : 'videos'}…`);
+  try {
+    const url = `${API_BASE}/search?q=${encodeURIComponent(q)}&limit=15&api_key=${encodeURIComponent(API_KEY)}`;
+    const res = await fetch(url);
+    if(!res.ok) throw Error('Search API Error');
+    const data = await res.json();
+    if(thisSearch !== searchNumber) return;
+    const found = data.result || data.tracks || data.results || [];
+    tracks = Array.isArray(found) ? found : [];
+    currentIndex = -1;
+    renderTracks();
+    if(autoPlayFirst && tracks.length > 0 && currentMode === 'music') {
+      playSong(0);
+    }
+  } catch(e) {
+    if(thisSearch === searchNumber) message('Failed to fetch. Please check connection.', true);
+  } finally {
+    busy = false;
+  }
+}
+
+async function playSong(index){
+  if(index < 0 || index >= tracks.length) return;
+  currentIndex = index; const t = tracks[index];
+  $('dock').classList.remove('hidden');$('notice').textContent = 'Loading audio…';
+  updatePlayer();
+  try {
+    const streamUrl = getDownloadUrl(targetOf(t), false);
+    audio.src = streamUrl;
+    audio.load();
+    await audio.play();
+    $('notice').textContent = 'Playing on RIVANSHH.';
+    setLockScreenNotification(t);
+  } catch(e) {
+    $('notice').textContent = 'Tap anywhere to allow audio playback.';
+    if(!hasUserInteracted) {
+      window.addEventListener('pointerdown', function unlockAudio(){
+        audio.play().catch(()=>{});
+        hasUserInteracted = true;
+        window.removeEventListener('pointerdown', unlockAudio);
+      }, {once: true});
+    }
+  }
+}
+
+function updatePlayer(){
+  const t = tracks[currentIndex]; if(!t) return;
+  const title = titleOf(t), artist = artistOf(t), art = artOf(t);
+  $('miniTitle').textContent = title; $('miniArtist').textContent = artist;
+  safeImage($('miniCover'), art);
+  $('bigTitle').textContent = title; $('bigArtist').textContent = artist;
+  $('bigAlbum').textContent = 'RIVANSHH Soundstream';
+  safeImage($('bigCover'), art);$('miniPlay').textContent = audio.paused ? '▶' : 'Ⅱ';
+  $('fullPlay').textContent = audio.paused ? '▶' : 'Ⅱ';
+  $('fullLikeBtn').textContent = isSongLiked(t) ? '❤️' : '♡';
+  $('fullDlBtn').textContent = currentUser?.isPremium ? '⬇ Download MP3' : '🔒 Download MP3 (₹00)';
+}
+
+function togglePlayback(){
+  if(!audio.src){
+    if(tracks.length > 0) playSong(0);
+    return;
+  }
+  if(audio.paused) audio.play();
+  else audio.pause();
+}
+
+function moveTrack(dir){
+  if(!tracks.length) return;
+  const next = currentIndex < 0 ? 0 : (currentIndex + dir + tracks.length) % trac
