@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#080b12">
+<title>RIVANSHH Hub</title>
+<style>
+:root, [data-theme="default"] {
+  --bg: #080b12; --panel: #121a26; --green: #28e07c; --yt-red: #ff0033;
+  --muted: #9aa8b9; --white: #f7f9fc; --border: #263244;
+}
+[data-theme="spotify"] { --bg: #121212; --panel: #181818; --green: #1db954; --yt-red: #ff334b; --muted: #b3b3b3; --white: #ffffff; --border: #282828; }
+[data-theme="neon-purple"] { --bg: #0a0518; --panel: #150d2e; --green: #b026ff; --yt-red: #ff007f; --muted: #9e8fb8; --white: #fbf9ff; --border: #311c60; }
+[data-theme="cyberpunk"] { --bg: #030a16; --panel: #07172e; --green: #00f0ff; --yt-red: #ff0055; --muted: #7ca1c9; --white: #e6ffff; --border: #0e3768; }
+[data-theme="blood-red"] { --bg: #0f0406; --panel: #20080d; --green: #ff2a51; --yt-red: #ff0033; --muted: #b88f96; --white: #fff5f6; --border: #42111b; }
+[data-theme="emerald"] { --bg: #040f0a; --panel: #0a2016; --green: #00ff88; --yt-red: #ff3366; --muted: #7ca893; --white: #f0fff7; --border: #14402d; }
+[data-theme="sunset-gold"] { --bg: #120902; --panel: #241406; --green: #ff8c00; --yt-red: #ff2200; --muted: #bda188; --white: #fff8f0; --border: #4d2b0e; }
+[data-theme="midnight-blue"] { --bg: #020617; --panel: #0f172a; --green: #38bdf8; --yt-red: #ef4444; --muted: #94a3b8; --white: #f8fafc; --border: #1e293b; }
+[data-theme="amoled-black"] { --bg: #000000; --panel: #0c0c0c; --green: #ffffff; --yt-red: #ff0000; --muted: #777777; --white: #ffffff; --border: #222222; }
+[data-theme="rose-gold"] { --bg: #14070c; --panel: #260e18; --green: #ff66a3; --yt-red: #ff1a40; --muted: #b88d9e; --white: #fff0f5; --border: #4d1c31; }
+
+*{box-sizing:border-box;margin:0;padding:0;transition:background-color .2s,border-color .2s}
+body{background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;min-height:100vh;padding-bottom:180px}
+button,input{font:inherit}button{cursor:pointer}
+.app{max-width:700px;margin:auto;padding:16px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:42px;height:42px;border-radius:12px;background:var(--green);color:#06140c;display:grid;place-items:center;font-size:24px;font-weight:bold}
+.logo.yt-theme{background:var(--yt-red);color:#fff}
+.brand h1{font-size:19px;letter-spacing:1.5px}
+.brand small{display:block;font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:2px}
+.circle-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--panel);color:white;font-size:16px;display:grid;place-items:center}
+
+.theme-drawer{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 14px;margin-bottom:10px;scrollbar-width:none}
+.theme-drawer::-webkit-scrollbar{display:none}
+.theme-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);cursor:pointer;flex-shrink:0}
+.theme-dot.active{border-color:#fff;transform:scale(1.15)}
+
+.portal-selector{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.portal-card{border-radius:18px;padding:14px 10px;border:1px solid var(--border);background:var(--panel);display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;cursor:pointer}
+.portal-card.music-active{border-color:var(--green)}
+.portal-card.yt-active{border-color:var(--yt-red)}
+.portal-badge{font-size:24px}
+.portal-card h4{font-size:13px;font-weight:700}
+.portal-card p{font-size:10px;color:var(--muted)}
+
+.search{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:4px 10px;margin-bottom:16px}
+.search span{font-size:20px;color:var(--muted)}
+.search input{flex:1;min-width:0;background:transparent;color:white;border:0;outline:0;padding:10px 0;font-size:14px}
+.search button{border:0;border-radius:9px;padding:9px 13px;background:var(--green);color:#07140d;font-weight:bold}
+.search button.yt-btn{background:var(--yt-red);color:#fff}
+
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:20px;padding-bottom:4px;scrollbar-width:none}
+.chip{flex-shrink:0;padding:8px 14px;border:1px solid var(--border);background:var(--panel);border-radius:20px;color:#d5dce5;font-size:12px}
+.chip.active{background:var(--green);border-color:var(--green);color:#06140c;font-weight:600}
+.chip.yt-chip.active{background:var(--yt-red);border-color:var(--yt-red);color:#fff}
+
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-head h3{font-size:17px}
+.results{display:flex;flex-direction:column;gap:10px}
+
+.track{display:flex;align-items:center;gap:10px;padding:10px;background:var(--panel);border:1px solid var(--border);border-radius:14px}
+.cover{width:54px;height:54px;flex-shrink:0;object-fit:cover;border-radius:9px;background:rgba(255,255,255,0.05)}
+.info{flex:1;min-width:0}
+.title{font-size:14px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.artist{font-size:11px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track-actions{display:flex;align-items:center;gap:6px}
+.action-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#d5dce5;display:grid;place-items:center;font-size:13px}
+.action-btn.liked{color:#ff3366;border-color:#ff3366}
+.action-btn.play-btn{color:var(--green)}
+
+.yt-card{background:var(--panel);border:1px solid var(--border);border-radius:15px;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding-bottom:10px}
+.yt-thumb-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;cursor:pointer}
+.yt-thumb{width:100%;height:100%;object-fit:cover}
+.yt-play-badge{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,0.4);color:#fff;font-size:38px}
+.yt-meta{padding:0 10px;display:flex;align-items:center;justify-content:space-between}
+.yt-text{flex:1;min-width:0}
+.yt-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yt-channel{font-size:11px;color:var(--muted);margin-top:3px}
+.yt-dl-btn{border:1px solid var(--border);background:rgba(255,255,255,0.06);color:#fff;padding:6px 10px;border-radius:8px;font-size:11px;display:flex;align-items:center;gap:4px}
+
+.library-tabs{display:flex;gap:10px;margin-bottom:16px}
+.lib-pill{padding:7px 15px;border-radius:20px;background:var(--panel);border:1px solid var(--border);color:var(--white);font-size:12px}
+.lib-pill.active{background:var(--green);color:#06140c;font-weight:bold}
+.btn-create-pl{width:100%;padding:12px;background:var(--panel);border:1px dashed var(--green);color:var(--green);border-radius:14px;font-weight:bold;font-size:13px;margin-bottom:16px}
+.pl-card{display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:12px;margin-bottom:10px}
+
+.dock{position:fixed;z-index:10;bottom:70px;left:9px;right:9px;max-width:680px;margin:auto;background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:10px 12px;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+.dock-top{display:flex;align-items:center;gap:10px}
+.mini-cover{width:42px;height:42px;object-fit:cover;border-radius:8px;background:rgba(255,255,255,0.05)}
+.mini-info{flex:1;min-width:0}
+.mini-info b,.mini-info small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-info b{font-size:12px}
+.mini-info small{font-size:10px;color:var(--muted);margin-top:4px}
+.dock button{border:0;background:transparent;color:white;font-size:19px;padding:4px}
+.dock .green{color:var(--green);font-size:24px}
+.progress{height:3px;background:rgba(255,255,255,0.1);margin-top:8px;border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:var(--green)}
+
+.bottom-nav{position:fixed;z-index:11;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 5px 18px;background:var(--bg);border-top:1px solid var(--border);backdrop-filter:blur(16px)}
+.nav{border:0;background:transparent;color:var(--muted);font-size:11px;display:grid;gap:4px;justify-items:center;min-width:60px}
+.nav span{font-size:20px}.nav.active{color:var(--green)}
+
+.full{position:fixed;z-index:30;inset:0;background:var(--bg);overflow-y:auto;padding:20px 23px 35px;display:flex;flex-direction:column}
+.full-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.big-cover{width:min(76vw,320px);aspect-ratio:1;object-fit:cover;border-radius:20px;margin:10px auto 25px;background:var(--panel);box-shadow:0 18px 50px rgba(0,0,0,0.6)}
+.full-title{font-size:21px;font-weight:bold}
+.full-artist{color:var(--muted);font-size:13px;margin-top:6px}
+.full-album{font-size:12px;color:var(--green);margin-top:4px}
+.seek{width:100%;accent-color:var(--green);margin-top:22px}
+.times{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.controls{display:flex;align-items:center;justify-content:space-around;margin:20px 0}
+.controls button{background:transparent;border:0;color:white;font-size:25px}
+.controls .big-play{background:var(--green);color:#06140c;width:62px;height:62px;border-radius:50%;font-size:27px}
+.full-actions{display:flex;gap:12px;justify-content:center;margin-bottom:12px}
+.full-btn{border:1px solid var(--border);background:var(--panel);color:#fff;padding:8px 16px;border-radius:20px;font-size:12px}
+
+.modal-overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-content{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:24px;position:relative}
+.btn-primary{width:100%;padding:12px;background:var(--green);color:#06140c;border:0;border-radius:12px;font-weight:bold}
+.btn-close{position:absolute;top:16px;right:16px;background:transparent;border:0;color:var(--muted);font-size:20px}
+
+.yt-player-modal{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;justify-content:center;padding:15px}
+.yt-player-wrap{width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
+.yt-player-modal iframe{width:100%;height:100%;border:0}
+.close-yt{align-self:flex-end;color:white;border:0;background:transparent;font-size:26px;margin-bottom:10px}
+.hidden{display:none!important}
+.msg{text-align:center;color:var(--muted);font-size:13px;padding:24px 12px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" id="mainLogo">♫</div>
+      <div>
+        <h1 id="brandTitle">RIVANSHH MUSIC</h1>
+        <small id="brandSub">ABHIVANSH SRIVASTAV</small>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="circle-btn" id="openPlayer">♫</button>
+    </div>
+  </header>
+
+  <div class="theme-drawer" id="themePicker">
+    <div class="theme-dot active" data-t="default" onclick="applyTheme('default')" style="background:#080b12;border-color:#28e07c" title="Default Dark"></div>
+    <div class="theme-dot" data-t="spotify" onclick="applyTheme('spotify')" style="background:#121212;border-color:#1db954" title="Spotify Green"></div>
+    <div class="theme-dot" data-t="neon-purple" onclick="applyTheme('neon-purple')" style="background:#150d2e;border-color:#b026ff" title="Neon Purple"></div>
+    <div class="theme-dot" data-t="cyberpunk" onclick="applyTheme('cyberpunk')" style="background:#07172e;border-color:#00f0ff" title="Cyberpunk"></div>
+    <div class="theme-dot" data-t="blood-red" onclick="applyTheme('blood-red')" style="background:#20080d;border-color:#ff2a51" title="Blood Red"></div>
+    <div class="theme-dot" data-t="emerald" onclick="applyTheme('emerald')" style="background:#0a2016;border-color:#00ff88" title="Emerald Glow"></div>
+    <div class="theme-dot" data-t="sunset-gold" onclick="applyTheme('sunset-gold')" style="background:#241406;border-color:#ff8c00" title="Sunset Gold"></div>
+    <div class="theme-dot" data-t="midnight-blue" onclick="applyTheme('midnight-blue')" style="background:#020617;border-color:#38bdf8" title="Midnight Blue"></div>
+    <div class="theme-dot" data-t="amoled-black" onclick="applyTheme('amoled-black')" style="background:#000000;border-color:#ffffff" title="Pure AMOLED"></div>
+    <div class="theme-dot" data-t="rose-gold" onclick="applyTheme('rose-gold')" style="background:#260e18;border-color:#ff66a3" title="Rose Gold"></div>
+  </div>
+
+  <div class="portal-selector">
+    <div class="portal-card music-active" id="btnModeMusic">
+      <div class="portal-badge">🎧</div>
+      <h4>RIVANSHH MUSIC</h4>
+      <p>Abhivansh Srivastav</p>
+    </div>
+    <div class="portal-card" id="btnModeTube">
+      <div class="portal-badge">▶️</div>
+      <h4>RIVANSHHTUBE</h4>
+      <p>Abhivansh Srivastav</p>
+    </div>
+  </div>
+
+  <main id="homePage">
+    <div class="search" id="searchBox">
+      <span>⌕</span>
+      <input id="query" type="search" placeholder="Search songs or artists..." autocomplete="off">
+      <button id="searchBtn">Search</button>
+    </div>
+    <div class="chips" id="chipsContainer">
+      <button class="chip active" data-q="Hindi trending hits">Hindi</button>
+      <button class="chip" data-q="Bollywood hits">Bollywood</button>
+      <button class="chip" data-q="Romantic songs">Romantic</button>
+      <button class="chip" data-q="Arijit Singh">Arijit Singh</button>
+      <button class="chip" data-q="Punjabi hits">Punjabi</button>
+    </div>
+    <div class="section-head">
+      <h3 id="heading">Discover Music</h3>
+      <span id="count"></span>
+    </div>
+    <div class="results" id="results"><p class="msg">Loading tracks…</p></div>
+  </main>
+
+  <main id="libraryPage" class="hidden">
+    <div class="library-tabs">
+      <button class="lib-pill active" id="tabPlaylists">Playlists</button>
+      <button class="lib-pill" id="tabLiked">Liked Songs (❤️)</button>
+      <button class="lib-pill" id="tabRecent">Recent</button>
+    </div>
+    <div id="viewPlaylists">
+      <button class="btn-create-pl" id="btnCreatePl">+ Create New Playlist</button>
+      <div id="playlistList" class="results"></div>
+    </div>
+    <div id="viewLiked" class="hidden">
+      <div id="likedList" class="results"><p class="msg">No liked songs yet.</p></div>
+    </div>
+    <div id="viewRecent" class="hidden">
+      <div id="libraryList" class="results"><p class="msg">Songs you play will appear here.</p></div>
+    </div>
+  </main>
+</div>
+
+<div class="dock hidden" id="dock">
+  <div class="dock-top">
+    <img class="mini-cover" id="miniCover" alt="">
+    <div class="mini-info" id="miniOpen">
+      <b id="miniTitle">Nothing playing</b>
+      <small id="miniArtist">Choose a song</small>
+    </div>
+    <button id="prev">⏮</button>
+    <button class="green" id="miniPlay">▶</button>
+    <button id="next">⏭</button>
+  </div>
+  <div class="progress"><div class="progress-fill" id="fill"></div></div>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav active" id="homeTab"><span>⌂</span>Home</button>
+  <button class="nav" id="searchTab"><span>⌕</span>Search</button>
+  <button class="nav" id="libraryTab"><span>▤</span>Library</button>
+</nav>
+
+<div class="full hidden" id="full">
+  <div class="full-head">
+    <button class="circle-btn" id="closeFull">⌄</button>
+    <small>NOW PLAYING</small>
+    <button class="circle-btn" id="fullLikeBtn">♡</button>
+  </div>
+  <img class="big-cover" id="bigCover" alt="Album artwork">
+  <div class="full-title" id="bigTitle">Choose a song</div>
+  <div class="full-artist" id="bigArtist">RIVANSHH MUSIC</div>
+  <div class="full-album" id="bigAlbum">Album information</div>
+  <input class="seek" id="seek" type="range" min="0" max="1000" value="0">
+  <div class="times"><span id="elapsed">0:00</span><span id="duration">0:00</span></div>
+  <div class="controls">
+    <button id="fullPrev">⏮</button>
+    <button class="big-play" id="fullPlay">▶</button>
+    <button id="fullNext">⏭</button>
+  </div>
+  <div class="full-actions">
+    <button class="full-btn" id="fullAddToPlBtn">➕ Add to Playlist</button>
+    <button class="full-btn" id="fullDlBtn">⬇ Download MP3</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="addToPlModal">
+  <div class="modal-content">
+    <button class="btn-close" id="closeAddToPl">✕</button>
+    <h3>Add to Playlist</h3>
+    <p>Select which playlist to add this track to:</p>
+    <div id="plChoiceList" class="results" style="max-height:220px;overflow-y:auto;margin-bottom:15px"></div>
+  </div>
+</div>
+
+<div class="yt-player-modal hidden" id="ytModal">
+  <button class="close-yt" id="closeYt">✕ Close</button>
+  <div class="yt-player-wrap">
+    <iframe id="ytIframe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+</div>
+
+<audio id="audio" preload="auto" playsinline webkit-playsinline></audio>
+  <script>
+'use strict';
+const $ = id => document.getElementById(id);
+const audio = $('audio');
+const fallbackArt = 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><defs><linearGradient id="g"><stop stop-color="#135c4b"/><stop offset="1" stop-color="#15263f"/></linearGradient></defs><rect width="300" height="300" rx="25" fill="url(#g)"/><text x="150" y="185" font-size="115" text-anchor="middle" fill="#39ed9a">♫</text></svg>');
+
+const DEFAULT_TRACKS = [
+  { title: 'Kesariya (Chill Beat)', channel: 'Arijit Singh, Pritam', id: 'BddP6PYo2gs', thumbnail: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500', audioUrl: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-ambient-112343.mp3' },
+  { title: 'Apna Bana Le (Lo-Fi)', channel: 'Arijit Singh, Sachin-Jigar', id: 'ElZfdU54Cp8', thumbnail: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500', audioUrl: 'https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f77cd0.mp3?filename=lofi-study-112191.mp3' },
+  { title: 'Raataan Lambiyan (Acoustic)', channel: 'Jubin Nautiyal, Tanishk Bagchi', id: 'gvyUuxdRdR4', thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500', audioUrl: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=relaxed-vlog-night-street-131746.mp3' },
+  { title: 'Maan Meri Jaan', channel: 'King', id: 'VuG7FT9fZ4A', thumbnail: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500', audioUrl: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=chill-abstract-intention-12099.mp3' },
+  { title: 'Midnight Lo-Fi Stream', channel: 'RIVANSHH Vibes', id: '5qap5aO4i9A', thumbnail: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=500', audioUrl: 'https://cdn.pixabay.com/download/audio/2022/11/06/audio_2c9497e885.mp3?filename=midnight-forest-184304.mp3' }
+];
+
+const DEFAULT_VIDEOS = [
+  { title: 'Kesariya - Official Video | Brahmāstra | Arijit Singh', channel: 'Sony Music India', id: 'BddP6PYo2gs', thumbnail: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500' },
+  { title: 'Apna Bana Le - Bhediya | Varun Dhawan | Arijit Singh', channel: 'Zee Music Company', id: 'ElZfdU54Cp8', thumbnail: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500' },
+  { title: 'Maan Meri Jaan | Official Music Video | King', channel: 'King', id: 'VuG7FT9fZ4A', thumbnail: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500' },
+  { title: 'Raataan Lambiyan – Official Video | Shershaah', channel: 'Sony Music India', id: 'gvyUuxdRdR4', thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500' },
+  { title: 'Kahani Suno 2.0 | Kaifi Khalil | Official Video', channel: 'Kaifi Khalil', id: '_XBVWlI8TsQ', thumbnail: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=500' }
+];
+
+let playlists = JSON.parse(localStorage.getItem('riv_playlists') || '[]');
+let likedSongs = JSON.parse(localStorage.getItem('riv_liked') || '[]');
+let library = JSON.parse(localStorage.getItem('riv_recent') || '[]');
+let currentMode = 'music', tracks = [], currentIndex = -1, busy = false, searchNumber = 0, trackToAdd = null;
+
+function saveState(){
+  localStorage.setItem('riv_playlists', JSON.stringify(playlists));
+  localStorage.setItem('riv_liked', JSON.stringify(likedSongs));
+  localStorage.setItem('riv_recent', JSON.stringify(library));
+}
+
+function text(v, f=''){return typeof v==='string'||typeof v==='number'?String(v):f}
+function titleOf(t){return text(t.title||t.name,'Unknown Title')}
+function artistOf(t){return text(t.channel||t.artist||t.author||t.primaryArtists,'Unknown Artist')}
+function targetOf(t){return t.id||t.link||t.url||titleOf(t)}
+function timeOf(s){if(!Number.isFinite(s)||s<0)return'0:00';return Math.floor(s/60)+':'+Math.floor(s%60).toString().padStart(2,'0')}
+function artOf(t){return (typeof t.thumbnail==='string'&&t.thumbnail)?t.thumbnail:fallbackArt}
+function safeImage(img, src){img.onerror=()=>{img.onerror=null;img.src=fallbackArt};img.src=src||fallbackArt}
+function message(msg){const p=document.createElement('p');p.className='msg';p.textContent=msg;$('results').replaceChildren(p)}
+
+function isSongLiked(track){return likedSongs.some(s => targetOf(s) === targetOf(track))}
+function toggleLike(track){
+  if(isSongLiked(track)) likedSongs = likedSongs.filter(s => targetOf(s) !== targetOf(track));
+  else likedSongs.unshift(track);
+  saveState();
+  if(currentIndex >= 0) updatePlayer();
+  renderLikedSongs();
+  renderTracks();
+}
+
+function getAudioStream(track){
+  return track.audioUrl || 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-ambient-112343.mp3';
+}
+
+function applyTheme(themeName){
+  if (!themeName) themeName = 'default';
+  document.documentElement.setAttribute('data-theme', themeName);
+  document.body.setAttribute('data-theme', themeName);
+  localStorage.setItem('riv_theme', themeName);
+  document.querySelectorAll('.theme-dot').forEach(dot => {
+    if (dot.getAttribute('data-t') === themeName) dot.classList.add('active');
+    else dot.classList.remove('active');
+  });
+}
+
+function makeMusicCard(track, index, listContext = tracks){
+  const card = document.createElement('div'); card.className = 'track';
+  const img = document.createElement('img'); img.className = 'cover'; img.alt = 'Artwork'; safeImage(img, artOf(track));
+  const info = document.createElement('div'); info.className = 'info';
+  const title = document.createElement('div'); title.className = 'title'; title.textContent = titleOf(track);
+  const artist = document.createElement('div'); artist.className = 'artist'; artist.textContent = artistOf(track);
+  info.append(title, artist);
+
+  const actions = document.createElement('div'); actions.className = 'track-actions';
+  const likeBtn = document.createElement('button');
+  const liked = isSongLiked(track);
+  likeBtn.className = `action-btn ${liked ? 'liked' : ''}`;
+  likeBtn.textContent = liked ? '❤️' : '♡';
+  likeBtn.onclick = (e) => { e.stopPropagation(); toggleLike(track); };
+
+  const plBtn = document.createElement('button');
+  plBtn.className = 'action-btn'; plBtn.textContent = '＋';
+  plBtn.onclick = (e) => { e.stopPropagation(); openAddToPlaylistModal(track); };
+
+  const dlBtn = document.createElement('button');
+  dlBtn.className = 'action-btn'; dlBtn.textContent = '⬇';
+  dlBtn.onclick = (e) => { e.stopPropagation(); window.open(getAudioStream(track), '_blank'); };
+
+  const playBtn = document.createElement('button');
+  playBtn.className = 'action-btn play-btn'; playBtn.textContent = '▶';
+  playBtn.onclick = () => { tracks = listContext; playSong(index); };
+
+  actions.append(likeBtn, plBtn, dlBtn, playBtn);
+  card.append(img, info, actions);
+  return card;
+}
+
+function makeTubeCard(track){
+  const card = document.createElement('div'); card.className = 'yt-card';
+  const videoId = track.id || 'BddP6PYo2gs';
+  const thumbWrap = document.createElement('div'); thumbWrap.className = 'yt-thumb-wrap';
+  const thumb = document.createElement('img'); thumb.className = 'yt-thumb'; safeImage(thumb, artOf(track));
+  const playIcon = document.createElement('div'); playIcon.className = 'yt-play-badge'; playIcon.textContent = '▶';
+  thumbWrap.append(thumb, playIcon);
+  thumbWrap.onclick = () => openVideoPlayer(videoId);
+
+  const meta = document.createElement('div'); meta.className = 'yt-meta';
+  const textDiv = document.createElement('div'); textDiv.className = 'yt-text';
+  const title = document.createElement('div'); title.className = 'yt-title'; title.textContent = titleOf(track);
+  const channel = document.createElement('div'); channel.className = 'yt-channel'; channel.textContent = artistOf(track);
+  textDiv.append(title, channel);
+
+  const dl = document.createElement('button');
+  dl.className = 'yt-dl-btn'; dl.innerHTML = '⬇ MP4';
+  dl.onclick = (e) => { e.stopPropagation(); window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank'); };
+
+  meta.append(textDiv, dl);
+  card.append(thumbWrap, meta);
+  return card;
+}
+
+function openVideoPlayer(id){
+  audio.pause();
+  $('ytIframe').src = `https://www.youtube.com/embed/${id}?autoplay=1&enablejsapi=1&rel=0`;
+  $('ytModal').classList.remove('hidden');
+}
+$('closeYt').onclick = () => { $('ytIframe').src = '';$('ytModal').classList.add('hidden'); };
+
+function renderTracks(){
+  if(!tracks.length){ message('No results found.'); return; }
+  const frag = document.createDocumentFragment();
+  tracks.forEach((t, i) => {
+    if(currentMode === 'music') frag.appendChild(makeMusicCard(t, i, tracks));
+    else frag.appendChild(makeTubeCard(t));
+  });
+  $('results').replaceChildren(frag);$('count').textContent = tracks.length + (currentMode==='music'?' songs':' videos');
+}
+
+async function searchMusic(override, autoPlayFirst = false){
+  const q = (override || $('query').value).trim();
+  if(!q || busy) return;
+  busy = true; const thisSearch = ++searchNumber;
+  message(`Loading tracks…`);
+
+  if(currentMode === 'tube'){
+    busy = false; tracks = DEFAULT_VIDEOS; renderTracks(); return;
+  }
+
+  try {
+    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=music&entity=song&limit=15&country=IN`;
+    const res = await fetch(url);
+    if(!res.ok) throw Error('Search Error');
+    const data = await res.json();
+    if(thisSearch !== searchNumber) return;
+
+    if(data.results && data.results.length > 0){
+      tracks = data.results.map(item => ({
+        title: item.trackName, channel: item.artistName, id: item.trackId,
+        thumbnail: item.artworkUrl100 ? item.artworkUrl100.replace('100x100bb', '600x600bb') : fallbackArt,
+        audioUrl: item.previewUrl
+      }));
+    } else { tracks = DEFAULT_TRACKS; }
+  } catch(e) { tracks = DEFAULT_TRACKS; }
+  finally {
+    busy = false; currentIndex = -1; renderTracks();
+    if(autoPlayFirst && tracks.length > 0 && currentMode === 'music') playSong(0);
+  }
+}
+
+async function playSong(index){
+  if(index < 0 || index >= tracks.length) return;
+  currentIndex = index; const t = tracks[index];
+  $('dock').classList.remove('hidden');
+  updatePlayer();
+
+  try {
+    audio.pause();
+    audio.src = getAudioStream(t);
+    audio.load();
+    await audio.play();
+  } catch(err) {
+    console.warn('Autoplay waiting for touch');
+  }
+}
+
+function updatePlayer(){
+  const t = tracks[currentIndex]; if(!t) return;
+  $('miniTitle').textContent = titleOf(t);$('miniArtist').textContent = artistOf(t);
+  safeImage($('miniCover'), artOf(t));
+  $('bigTitle').textContent = titleOf(t);$('bigArtist').textContent = artistOf(t);
+  safeImage($('bigCover'), artOf(t));$('miniPlay').textContent = audio.paused ? '▶' : 'Ⅱ';
+  $('fullPlay').textContent = audio.paused ? '▶' : 'Ⅱ';
+  $('fullLikeBtn').textContent = isSongLiked(t) ? '❤️' : '♡';
+}
+
+function togglePlayback(){
+  if(!audio.src){ if(tracks.length > 0) playSong(0); return; }
+  if(audio.paused) audio.play(); else audio.pause();
+}
+
+function moveTrack(dir){
+  if(!tracks.length) return;
+  const next = currentIndex < 0 ? 0 : (currentIndex + dir + tracks.length) % tracks.length;
+  playSong(next);
+}
+
+function showFull(){ $('full').classList.remove('hidden'); if(currentIndex >= 0) updatePlayer(); }
+
+function showPage(page){
+  const isLibrary = page === 'library';
+  $('homePage').classList.toggle('hidden', isLibrary);
+  $('libraryPage').classList.toggle('hidden', !isLibrary);$('homeTab').classList.toggle('active', page === 'home');
+  $('searchTab').classList.toggle('active', page === 'search');$('libraryTab').classList.toggle('active', isLibrary);
+  if(page === 'search'){
+    $('homePage').classList.remove('hidden'); $('libraryPage').classList.add('hidden');$('query').focus();
+  }
+  if(isLibrary) renderPlaylists();
+}
+
+$('tabPlaylists').onclick = () => {
+  $('tabPlaylists').className = 'lib-pill active';$('tabLiked').className = 'lib-pill'; $('tabRecent').className = 'lib-pill';$('viewPlaylists').classList.remove('hidden'); $('viewLiked').classList.add('hidden');$('viewRecent').classList.add('hidden');
+  renderPlaylists();
+};
+$('tabLiked').onclick = () => {
+  $('tabPlaylists').className = 'lib-pill';$('tabLiked').className = 'lib-pill active'; $('tabRecent').className = 'lib-pill';$('viewPlaylists').classList.add('hidden'); $('viewLiked').classList.remove('hidden');$('viewRecent').classList.add('hidden');
+  renderLikedSongs();
+};
+$('tabRecent').onclick = () => {
+  $('tabPlaylists').className = 'lib-pill';$('tabLiked').className = 'lib-pill'; $('tabRecent').className = 'lib-pill active';$('viewPlaylists').classList.add('hidden'); $('viewLiked').classList.add('hidden');$('viewRecent').classList.remove('hidden');
+  renderRecent();
+};
+
+$('btnCreatePl').onclick = () => {
+  const name = prompt('Enter playlist name:');
+  if(!name || !name.trim()) return;
+  playlists.push({ id: 'pl_' + Date.now(), name: name.trim(), songs: [] });
+  saveState(); renderPlaylists();
+};
+
+function renderPlaylists(){
+  const container = $('playlistList');
+  if(!playlists.length){ container.innerHTML = '<p class="msg">No playlists created yet.</p>'; return; }
+  container.innerHTML = '';
+  playlists.forEach(pl => {
+    const item = document.createElement('div');
+    item.className = 'pl-card';
+    item.innerHTML = `<div class="pl-info"><b>${pl.name}</b><small>${pl.songs.length} songs</small></div><div><button class="action-btn play-btn" style="display:inline-grid">▶</button></div>`;
+    item.querySelector('.play-btn').onclick = () => {
+      if(!pl.songs.length){ alert('Playlist is empty!'); return; }
+      tracks = pl.songs.slice(); playSong(0);
+    };
+    container.appendChild(item);
+  });
+}
+
+function renderLikedSongs(){
+  const list = $('likedList');
+  if(!likedSongs.length){ list.innerHTML = '<p class="msg">No liked songs yet.</p>'; return; }
+  const frag = document.createDocumentFragment();
+  likedSongs.forEach((t, i) => frag.appendChild(makeMusicCard(t, i, likedSongs)));
+  list.replaceChildren(frag);
+}
+
+function renderRecent(){
+  const list = $('libraryList');
+  if(!library.length){ list.innerHTML = '<p class="msg">Played tracks appear here.</p>'; return; }
+  const frag = document.createDocumentFragment();
+  library.forEach((t, i) => frag.appendChild(makeMusicCard(t, i, library)));
+  list.replaceChildren(frag);
+}
+
+function openAddToPlaylistModal(track){
+  trackToAdd = track;
+  const list = $('plChoiceList');
+  list.innerHTML = '';
+  if(!playlists.length){ list.innerHTML = '<p class="msg">Create a playlist first.</p>'; }
+  else {
+    playlists.forEach(pl => {
+      const b = document.createElement('button');
+      b.className = 'chip'; b.style.width = '100%'; b.style.textAlign = 'left';
+      b.textContent = `${pl.name} (${pl.songs.length} songs)`;
+      b.onclick = () => {
+        pl.songs.push(trackToAdd); saveState(); $('addToPlModal').classList.add('hidden'); alert(`Added to "${pl.name}"!`);
+      };
+      list.appendChild(b);
+    });
+  }
+  $('addToPlModal').classList.remove('hidden');
+}
+$('closeAddToPl').onclick = () =>$('addToPlModal').classList.add('hidden');
+
+$('fullLikeBtn').onclick = () => { if(currentIndex >= 0) toggleLike(tracks[currentIndex]); };
+$('fullAddToPlBtn').onclick = () => { if(currentIndex >= 0) openAddToPlaylistModal(tracks[currentIndex]); };$('fullDlBtn').onclick = () => { if(currentIndex >= 0) window.open(getAudioStream(tracks[currentIndex]), '_blank'); };
+
+$('btnModeMusic').onclick = () => switchMode('music');$('btnModeTube').onclick = () => switchMode('tube');
+
+function switchMode(mode){
+  currentMode = mode;
+  if(mode === 'music'){
+    $('btnModeMusic').className = 'portal-card music-active';$('btnModeTube').className = 'portal-card';
+    $('mainLogo').className = 'logo';$('mainLogo').textContent = '♫';
+    $('brandTitle').textContent = 'RIVANSHH MUSIC';$('searchBtn').className = '';
+    $('heading').textContent = 'Discover Music';$('query').placeholder = 'Search songs or artists...';
+    setupChips(['Hindi trending hits', 'Bollywood hits', 'Romantic songs', 'Arijit Singh', 'Punjabi hits']);
+    searchMusic('Hindi trending hits', true);
+  } else {
+    $('btnModeMusic').className = 'portal-card';$('btnModeTube').className = 'portal-card yt-active';
+    $('mainLogo').className = 'logo yt-theme';$('mainLogo').textContent = '▶';
+    $('brandTitle').textContent = 'RIVANSHHTUBE';$('searchBtn').className = 'yt-btn';
+    $('heading').textContent = 'Trending Videos';$('query').placeholder = 'Search videos on YouTube...';
+    audio.pause();
+    setupChips(['Trending India', 'Music Videos', 'Gaming', 'Podcasts', 'Viral Videos']);
+    tracks = DEFAULT_VIDEOS;
+    renderTracks();
+  }
+}
+
+function setupChips(list){
+  const container = $('chipsContainer');
+  container.innerHTML = '';
+  list.forEach((item, idx) => {
+    const btn = document.createElement('button');
+    btn.className = `chip ${currentMode==='tube'?'yt-chip':''} ${idx===0?'active':''}`;
+    btn.dataset.q = item;
+    btn.textContent = item.replace(' hits', '').replace(' trending', '');
+    btn.onclick = () => {
+      container.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      searchMusic(item, currentMode === 'music');
+    };
+    container.appendChild(btn);
+  });
+}
+
+$('searchBtn').addEventListener('click', () => searchMusic());$('query').addEventListener('keydown', e => { if(e.key === 'Enter') searchMusic(); });
+$('miniPlay').onclick = togglePlayback; $('fullPlay').onclick = togglePlayback;
+$('prev').onclick = () => moveTrack(-1);$('next').onclick = () => moveTrack(1);
+$('fullPrev').onclick = () => moveTrack(-1);$('fullNext').onclick = () => moveTrack(1);
+$('miniOpen').onclick = showFull; $('openPlayer').onclick = showFull;
+$('closeFull').onclick = () => $('full').classList.add('hidden');$('homeTab').onclick = () => showPage('home');
+$('searchTab').onclick = () => showPage('search');$('libraryTab').onclick = () => showPage('library');
+
+$('seek').addEventListener('input', () => {
+  if(Number.isFinite(audio.duration) && audio.duration > 0)
+    audio.currentTime = Number($('seek').value) / 1000 * audio.duration;
+});
+
+audio.addEventListener('play', () => {
+  updatePlayer();
+  const t = tracks[currentIndex];
+  if(t){ library = library.filter(x => targetOf(x) !== targetOf(t)); library.unshift(t); library = library.slice(0, 30); saveState(); }
+});
+audio.addEventListener('pause', updatePlayer);
+audio.addEventListener('timeupdate', () => {
+  const d = audio.duration;
+  $('elapsed').textContent = timeOf(audio.currentTime);$('duration').textContent = timeOf(d);
+  if(Number.isFinite(d) && d > 0){
+    $('seek').value = String(Math.round(audio.currentTime / d * 1000));$('fill').style.width = (audio.currentTime / d * 100) + '%';
+  }
+});
+audio.addEventListener('ended', () => moveTrack(1));
+
+const savedTheme = localStorage.getItem('riv_theme') || 'default';
+applyTheme(savedTheme);
+searchMusic('Hindi trending hits', true);
+</script>
+</body>
+</html>
