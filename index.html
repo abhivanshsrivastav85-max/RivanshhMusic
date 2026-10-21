@@ -23,19 +23,20 @@
       <button class="circle-btn" id="openPlayer">♫</button>
     </div>
   </header>
-  <!-- 🎨 10 Color Theme Switcher Bar -->
+  <!-- 🎨 10 Color Theme Switcher Bar with direct click trigger -->
   <div class="theme-drawer" id="themePicker">
-    <div class="theme-dot active" data-t="default" style="background:#080b12;border-color:#28e07c" title="Default Dark"></div>
-    <div class="theme-dot" data-t="spotify" style="background:#121212;border-color:#1db954" title="Spotify Green"></div>
-    <div class="theme-dot" data-t="neon-purple" style="background:#150d2e;border-color:#b026ff" title="Neon Purple"></div>
-    <div class="theme-dot" data-t="cyberpunk" style="background:#07172e;border-color:#00f0ff" title="Cyberpunk"></div>
-    <div class="theme-dot" data-t="blood-red" style="background:#20080d;border-color:#ff2a51" title="Blood Red"></div>
-    <div class="theme-dot" data-t="emerald" style="background:#0a2016;border-color:#00ff88" title="Emerald Glow"></div>
-    <div class="theme-dot" data-t="sunset-gold" style="background:#241406;border-color:#ff8c00" title="Sunset Gold"></div>
-    <div class="theme-dot" data-t="midnight-blue" style="background:#020617;border-color:#38bdf8" title="Midnight Blue"></div>
-    <div class="theme-dot" data-t="amoled-black" style="background:#000000;border-color:#ffffff" title="Pure AMOLED"></div>
-    <div class="theme-dot" data-t="rose-gold" style="background:#260e18;border-color:#ff66a3" title="Rose Gold"></div>
+    <div class="theme-dot active" data-t="default" onclick="applyTheme('default')" style="background:#080b12;border-color:#28e07c" title="Default Dark"></div>
+    <div class="theme-dot" data-t="spotify" onclick="applyTheme('spotify')" style="background:#121212;border-color:#1db954" title="Spotify Green"></div>
+    <div class="theme-dot" data-t="neon-purple" onclick="applyTheme('neon-purple')" style="background:#150d2e;border-color:#b026ff" title="Neon Purple"></div>
+    <div class="theme-dot" data-t="cyberpunk" onclick="applyTheme('cyberpunk')" style="background:#07172e;border-color:#00f0ff" title="Cyberpunk"></div>
+    <div class="theme-dot" data-t="blood-red" onclick="applyTheme('blood-red')" style="background:#20080d;border-color:#ff2a51" title="Blood Red"></div>
+    <div class="theme-dot" data-t="emerald" onclick="applyTheme('emerald')" style="background:#0a2016;border-color:#00ff88" title="Emerald Glow"></div>
+    <div class="theme-dot" data-t="sunset-gold" onclick="applyTheme('sunset-gold')" style="background:#241406;border-color:#ff8c00" title="Sunset Gold"></div>
+    <div class="theme-dot" data-t="midnight-blue" onclick="applyTheme('midnight-blue')" style="background:#020617;border-color:#38bdf8" title="Midnight Blue"></div>
+    <div class="theme-dot" data-t="amoled-black" onclick="applyTheme('amoled-black')" style="background:#000000;border-color:#ffffff" title="Pure AMOLED"></div>
+    <div class="theme-dot" data-t="rose-gold" onclick="applyTheme('rose-gold')" style="background:#260e18;border-color:#ff66a3" title="Rose Gold"></div>
   </div>
+
   
   <!-- Dual Mode Selection Covers -->
   <div class="portal-selector">
