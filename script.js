@@ -173,6 +173,16 @@ function makeMusicCard(track, index, listContext = tracks){
   const title = document.createElement('div'); title.className = 'title'; title.textContent = titleOf(track);
   const artist = document.createElement('div'); artist.className = 'artist'; artist.textContent = artistOf(track);
   info.append(title, artist);
+     // Download button (Direct Free for everyone)
+  const dlBtn = document.createElement('button');
+  dlBtn.className = 'action-btn';
+  dlBtn.textContent = '⬇';
+  dlBtn.title = 'Download MP3';
+  dlBtn.onclick = (e) => {
+    e.stopPropagation();
+    window.open(getAudioStream(track), '_blank');
+  };
+   
 
   const actions = document.createElement('div'); actions.className = 'track-actions';
   
@@ -218,7 +228,13 @@ function makeMusicCard(track, index, listContext = tracks){
 function makeTubeCard(track){
   const card = document.createElement('div'); card.className = 'yt-card';
   const videoId = track.id || 'BddP6PYo2gs';
-
+  const dl = document.createElement('button');
+  dl.className = 'yt-dl-btn';
+  dl.innerHTML = '⬇ MP4';
+  dl.onclick = () => {
+    window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+  };
+   
   const thumbWrap = document.createElement('div'); thumbWrap.className = 'yt-thumb-wrap';
   const thumb = document.createElement('img'); thumb.className = 'yt-thumb'; safeImage(thumb, artOf(track));
   const playIcon = document.createElement('div'); playIcon.className = 'yt-play-badge'; playIcon.textContent = '▶';
@@ -350,6 +366,7 @@ function updatePlayer(){
   safeImage($('bigCover'), art);$('miniPlay').textContent = audio.paused ? '▶' : 'Ⅱ';
   $('fullPlay').textContent = audio.paused ? '▶' : 'Ⅱ';
   $('fullLikeBtn').textContent = isSongLiked(t) ? '❤️' : '♡';
+     $('fullDlBtn').textContent = '⬇ Download MP3';
   $('fullDlBtn').textContent = currentUser?.isPremium ? '⬇ Download MP3' : '🔒 Download MP3 (₹0)';
 }
 
