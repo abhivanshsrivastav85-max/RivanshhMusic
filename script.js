@@ -149,12 +149,12 @@ function getAudioStream(track) {
 }
 
 function checkPremiumAccess(actionCallback){
-  if(currentUser && currentUser.isPremium){
+  // Sabhi features sabke liye 100% FREE
+  if(typeof actionCallback === 'function') {
     actionCallback();
-  } else {
-    openPaymentModal();
   }
 }
+
 
 function openPaymentModal(){
   const upiUrl = `upi://pay?pa=${MY_UPI_ID}&pn=${encodeURIComponent(MY_UPI_NAME)}&am=${AMOUNT}&cu=INR&tn=Rivanshh_VIP_Pass`;
