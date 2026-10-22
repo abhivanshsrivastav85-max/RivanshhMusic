@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#080b12">
+<title>RIVANSHH Hub</title>
+<style>
+:root, [data-theme="default"] {
+  --bg: #080b12; --panel: #121a26; --green: #1db954; --yt-red: #ff0033;
+  --muted: #9aa8b9; --white: #f7f9fc; --border: #263244;
+}
+[data-theme="spotify"] { --bg: #121212; --panel: #181818; --green: #1db954; --yt-red: #ff334b; --muted: #b3b3b3; --white: #ffffff; --border: #282828; }
+[data-theme="neon-purple"] { --bg: #0a0518; --panel: #150d2e; --green: #b026ff; --yt-red: #ff007f; --muted: #9e8fb8; --white: #fbf9ff; --border: #311c60; }
+[data-theme="cyberpunk"] { --bg: #030a16; --panel: #07172e; --green: #00f0ff; --yt-red: #ff0055; --muted: #7ca1c9; --white: #e6ffff; --border: #0e3768; }
+[data-theme="blood-red"] { --bg: #0f0406; --panel: #20080d; --green: #ff2a51; --yt-red: #ff0033; --muted: #b88f96; --white: #fff5f6; --border: #42111b; }
+[data-theme="emerald"] { --bg: #040f0a; --panel: #0a2016; --green: #00ff88; --yt-red: #ff3366; --muted: #7ca893; --white: #f0fff7; --border: #14402d; }
+[data-theme="sunset-gold"] { --bg: #120902; --panel: #241406; --green: #ff8c00; --yt-red: #ff2200; --muted: #bda188; --white: #fff8f0; --border: #4d2b0e; }
+[data-theme="midnight-blue"] { --bg: #020617; --panel: #0f172a; --green: #38bdf8; --yt-red: #ef4444; --muted: #94a3b8; --white: #f8fafc; --border: #1e293b; }
+[data-theme="amoled-black"] { --bg: #000000; --panel: #0c0c0c; --green: #ffffff; --yt-red: #ff0000; --muted: #777777; --white: #ffffff; --border: #222222; }
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;min-height:100vh;padding-bottom:170px}
+button,input{font:inherit}button{cursor:pointer}
+.app{max-width:720px;margin:auto;padding:16px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:12px;background:var(--green);color:#06140c;display:grid;place-items:center;font-size:22px;font-weight:bold}
+.logo.yt-theme{background:var(--yt-red);color:#fff}
+.brand h1{font-size:18px;letter-spacing:1px;font-weight:800}
+.brand small{display:block;font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:2px}
+.top-actions{display:flex;align-items:center;gap:8px}
+.circle-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--panel);color:white;font-size:15px;display:grid;place-items:center}
+
+.theme-drawer{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 14px;margin-bottom:10px;scrollbar-width:none}
+.theme-drawer::-webkit-scrollbar{display:none}
+.theme-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);cursor:pointer;flex-shrink:0}
+.theme-dot.active{border-color:#fff;transform:scale(1.15)}
+
+.portal-selector{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.portal-card{border-radius:16px;padding:14px 10px;border:1px solid var(--border);background:var(--panel);display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;cursor:pointer}
+.portal-card.music-active{border-color:var(--green);box-shadow:0 0 15px rgba(29,185,84,0.2)}
+.portal-card.yt-active{border-color:var(--yt-red);box-shadow:0 0 15px rgba(255,0,51,0.2)}
+.portal-badge{font-size:24px}
+.portal-card h4{font-size:13px;font-weight:700}
+.portal-card p{font-size:10px;color:var(--muted)}
+
+.search{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:4px 10px;margin-bottom:16px}
+.search span{font-size:18px;color:var(--muted)}
+.search input{flex:1;min-width:0;background:transparent;color:white;border:0;outline:0;padding:10px 0;font-size:14px}
+.search button{border:0;border-radius:9px;padding:9px 15px;background:var(--green);color:#07140d;font-weight:bold}
+.search button.yt-btn{background:var(--yt-red);color:#fff}
+
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:20px;padding-bottom:4px;scrollbar-width:none}
+.chip{flex-shrink:0;padding:8px 14px;border:1px solid var(--border);background:var(--panel);border-radius:20px;color:#d5dce5;font-size:12px}
+.chip.active{background:var(--green);border-color:var(--green);color:#06140c;font-weight:700}
+.chip.yt-chip.active{background:var(--yt-red);border-color:var(--yt-red);color:#fff}
+
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-head h3{font-size:16px;font-weight:700}
+.results{display:flex;flex-direction:column;gap:10px}
+
+.track{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--panel);border:1px solid var(--border);border-radius:14px;cursor:pointer}
+.cover{width:52px;height:52px;flex-shrink:0;object-fit:cover;border-radius:10px;background:rgba(255,255,255,0.05)}
+.info{flex:1;min-width:0}
+.title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.artist{font-size:11px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track-actions{display:flex;align-items:center;gap:6px}
+.action-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#d5dce5;display:grid;place-items:center;font-size:13px}
+.action-btn.liked{color:#ff3366;border-color:#ff3366}
+.action-btn.play-btn{color:var(--green);font-size:14px}
+
+.yt-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding-bottom:10px}
+.yt-thumb-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;cursor:pointer}
+.yt-thumb{width:100%;height:100%;object-fit:cover}
+.yt-play-badge{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,0.45);color:#fff;font-size:38px}
+.yt-meta{padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.yt-text{flex:1;min-width:0}
+.yt-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yt-channel{font-size:11px;color:var(--muted);margin-top:3px}
+.yt-actions{display:flex;gap:6px}
+.yt-btn-sub{border:1px solid var(--border);background:rgba(255,255,255,0.06);color:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:600}
+
+.library-tabs{display:flex;gap:10px;margin-bottom:16px}
+.lib-pill{padding:7px 15px;border-radius:20px;background:var(--panel);border:1px solid var(--border);color:var(--white);font-size:12px}
+.lib-pill.active{background:var(--green);color:#06140c;font-weight:bold}
+.btn-create-pl{width:100%;padding:12px;background:var(--panel);border:1px dashed var(--green);color:var(--green);border-radius:14px;font-weight:bold;font-size:13px;margin-bottom:16px}
+.pl-card{display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:12px;margin-bottom:10px}
+
+.dock{position:fixed;z-index:20;bottom:70px;left:9px;right:9px;max-width:680px;margin:auto;background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:10px 14px;box-shadow:0 10px 30px rgba(0,0,0,0.7);display:flex;flex-direction:column}
+.dock-top{display:flex;align-items:center;gap:10px}
+.mini-cover{width:42px;height:42px;object-fit:cover;border-radius:8px;background:rgba(255,255,255,0.05)}
+.mini-info{flex:1;min-width:0;cursor:pointer}
+.mini-info b,.mini-info small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-info b{font-size:12px}
+.mini-info small{font-size:10px;color:var(--muted);margin-top:3px}
+.dock button{border:0;background:transparent;color:white;font-size:19px;padding:4px}
+.dock .green{color:var(--green);font-size:24px}
+.progress{height:3px;background:rgba(255,255,255,0.1);margin-top:8px;border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:var(--green)}
+
+.bottom-nav{position:fixed;z-index:21;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:10px 5px 18px;background:var(--bg);border-top:1px solid var(--border)}
+.nav{border:0;background:transparent;color:var(--muted);font-size:11px;display:grid;gap:4px;justify-items:center;min-width:60px}
+.nav span{font-size:20px}.nav.active{color:var(--green)}
+
+.full{position:fixed;z-index:40;inset:0;background:var(--bg);overflow-y:auto;padding:20px 24px 40px;display:flex;flex-direction:column}
+.full-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.big-cover{width:min(75vw,300px);aspect-ratio:1;object-fit:cover;border-radius:20px;margin:10px auto 25px;background:var(--panel)}
+.full-title{font-size:20px;font-weight:bold}
+.full-artist{color:var(--muted);font-size:13px;margin-top:6px}
+.seek{width:100%;accent-color:var(--green);margin-top:24px}
+.times{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
+.controls{display:flex;align-items:center;justify-content:space-around;margin:22px 0}
+.controls button{background:transparent;border:0;color:white;font-size:24px}
+.controls .big-play{background:var(--green);color:#06140c;width:64px;height:64px;border-radius:50%;font-size:26px;display:grid;place-items:center}
+.full-actions{display:flex;gap:12px;justify-content:center}
+.full-btn{border:1px solid var(--border);background:var(--panel);color:#fff;padding:8px 16px;border-radius:20px;font-size:12px}
+
+/* Profile-Enriched Welcome Login Gate */
+.gate-wrapper{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.gate-card{width:100%;max-width:420px;background:var(--panel);border:1px solid var(--border);border-radius:24px;padding:26px 20px;text-align:center;box-shadow:0 15px 50px rgba(0,0,0,0.85);margin:auto}
+.creator-avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;border:3px solid var(--green);margin:0 auto 12px;box-shadow:0 0 20px rgba(29,185,84,0.3);display:block;background:#000}
+.app-feature-box{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:12px;margin:14px 0;text-align:left;font-size:11px;line-height:1.6}
+.feature-badge-music{color:var(--green);font-weight:700;display:inline-block;margin-bottom:3px}
+.feature-badge-tube{color:var(--yt-red);font-weight:700;display:inline-block;margin-top:6px;margin-bottom:3px}
+.gate-input{width:100%;padding:13px 15px;margin:8px 0;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:12px;color:#fff;outline:0}
+.gate-input:focus{border-color:var(--green)}
+.gate-btn{width:100%;padding:14px;background:var(--green);border:0;border-radius:12px;font-weight:bold;color:#05120a;margin-top:10px;font-size:14px}
+.gate-switch{font-size:12px;color:var(--muted);margin-top:14px;cursor:pointer}
+
+.modal-overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-content{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:24px;position:relative}
+.btn-close{position:absolute;top:16px;right:16px;background:transparent;border:0;color:var(--muted);font-size:20px}
+
+/* Ad-Free Video Modal */
+.yt-player-modal{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;justify-content:center;padding:15px}
+.yt-player-wrap{width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 10px 30px rgba(0,0,0,0.9)}
+.yt-player-modal iframe{width:100%;height:100%;border:0}
+.yt-modal-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.close-yt{color:white;border:0;background:transparent;font-size:18px;font-weight:bold}
+.yt-nav-btn{background:rgba(255,255,255,0.1);border:1px solid var(--border);color:white;padding:6px 12px;border-radius:8px;font-size:12px}
+
+.hidden{display:none!important}
+.msg{text-align:center;color:var(--muted);font-size:13px;padding:24px 12px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- 1. MANDATORY WELCOME LOGIN GATE WITH PROFILE PHOTO & APP DETAILS -->
+<div class="gate-wrapper" id="accountGate">
+  <div class="gate-card">
+    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" class="creator-avatar" id="creatorImg" alt="RIVANSHH">
+    <h2 style="font-size:20px;font-weight:800">Welcome to My App</h2>
+    <p style="font-size:12px;color:var(--muted);margin-top:2px">Created by Abhivansh Srivastav</p>
+
+    <div class="app-feature-box">
+      <span class="feature-badge-music">🎧 RIVANSHH MUSIC:</span>
+      <div>Play & download full HD songs in Hindi, Bhojpuri, Haryanvi, Punjabi, Marathi, English and more with background play & continuous loop.</div>
+      <span class="feature-badge-tube">▶️ RIVANSHHTUBE:</span>
+      <div>Watch all YouTube videos in crystal clear HD, ad-free streaming & instant fast MP4 downloads.</div>
+    </div>
+    
+    <form id="gateForm">
+      <input type="text" id="gateName" class="gate-input hidden" placeholder="Your Full Name">
+      <input type="email" id="gateEmail" class="gate-input" placeholder="Enter your email" required>
+      <input type="password" id="gatePass" class="gate-input" placeholder="Enter password" required>
+      <button type="submit" class="gate-btn" id="gateSubmitBtn">Sign In to Continue</button>
+      <div class="gate-switch" id="toggleGateMode">Don't have an account? Create One (Sign Up)</div>
+    </form>
+  </div>
+</div>
+
+<div class="app" id="mainApp">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" id="mainLogo">♫</div>
+      <div>
+        <h1 id="brandTitle">RIVANSHH MUSIC</h1>
+        <small id="brandSub">ABHIVANSH SRIVASTAV</small>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="circle-btn" id="btnProfile" title="Profile">👤</button>
+      <button class="circle-btn" id="openPlayer" title="Player">♫</button>
+    </div>
+  </header>
+
+  <div class="theme-drawer" id="themePicker">
+    <div class="theme-dot active" data-t="default" onclick="applyTheme('default')" style="background:#080b12;border-color:#1db954"></div>
+    <div class="theme-dot" data-t="spotify" onclick="applyTheme('spotify')" style="background:#121212;border-color:#1db954"></div>
+    <div class="theme-dot" data-t="neon-purple" onclick="applyTheme('neon-purple')" style="background:#150d2e;border-color:#b026ff"></div>
+    <div class="theme-dot" data-t="cyberpunk" onclick="applyTheme('cyberpunk')" style="background:#07172e;border-color:#00f0ff"></div>
+    <div class="theme-dot" data-t="blood-red" onclick="applyTheme('blood-red')" style="background:#20080d;border-color:#ff2a51"></div>
+    <div class="theme-dot" data-t="emerald" onclick="applyTheme('emerald')" style="background:#0a2016;border-color:#00ff88"></div>
+    <div class="theme-dot" data-t="sunset-gold" onclick="applyTheme('sunset-gold')" style="background:#241406;border-color:#ff8c00"></div>
+    <div class="theme-dot" data-t="midnight-blue" onclick="applyTheme('midnight-blue')" style="background:#020617;border-color:#38bdf8"></div>
+    <div class="theme-dot" data-t="amoled-black" onclick="applyTheme('amoled-black')" style="background:#000000;border-color:#ffffff"></div>
+  </div>
+
+  <div class="portal-selector">
+    <div class="portal-card music-active" id="btnModeMusic">
+      <div class="portal-badge">🎧</div>
+      <h4>RIVANSHH MUSIC</h4>
+      <p>Spotify Engine (All Languages)</p>
+    </div>
+    <div class="portal-card" id="btnModeTube">
+      <div class="portal-badge">▶️</div>
+      <h4>RIVANSHHTUBE</h4>
+      <p>YouTube Engine (Ad-Free HD)</p>
+    </div>
+  </div>
+
+  <main id="homePage">
+    <div class="search" id="searchBox">
+      <span>⌕</span>
+      <input id="query" type="search" placeholder="Search Hindi, Bhojpuri, Haryanvi, Punjabi, Marathi..." autocomplete="off">
+      <button id="searchBtn">Search</button>
+    </div>
+    <div class="chips" id="chipsContainer"></div>
+    <div class="section-head">
+      <h3 id="heading">Discover Music (Full Songs)</h3>
+      <span id="count"></span>
+    </div>
+    <div class="results" id="results"><p class="msg">Loading tracks...</p></div>
+  </main>
+
+  <main id="libraryPage" class="hidden">
+    <div class="library-tabs">
+      <button class="lib-pill active" id="tabPlaylists">Playlists</button>
+      <button class="lib-pill" id="tabLiked">Liked Songs (❤️)</button>
+    </div>
+    <div id="viewPlaylists">
+      <button class="btn-create-pl" id="btnCreatePl">+ Create New Playlist</button>
+      <div id="playlistList" class="results"></div>
+    </div>
+    <div id="viewLiked" class="hidden">
+      <div id="likedList" class="results"><p class="msg">No liked items yet.</p></div>
+    </div>
+  </main>
+</div>
+
+<!-- Bottom Mini Player -->
+<div class="dock hidden" id="dock">
+  <div class="dock-top">
+    <img class="mini-cover" id="miniCover" alt="">
+    <div class="mini-info" id="miniOpen">
+      <b id="miniTitle">Nothing playing</b>
+      <small id="miniArtist">Tap to open player</small>
+    </div>
+    <button id="prev">⏮</button>
+    <button class="green" id="miniPlay">▶</button>
+    <button id="next">⏭</button>
+  </div>
+  <div class="progress"><div class="progress-fill" id="fill"></div></div>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav active" id="homeTab"><span>⌂</span>Home</button>
+  <button class="nav" id="searchTab"><span>⌕</span>Search</button>
+  <button class="nav" id="libraryTab"><span>▤</span>Library</button>
+</nav>
+
+<!-- Full Player (Spotify Style) -->
+<div class="full hidden" id="full">
+  <div class="full-head">
+    <button class="circle-btn" id="closeFull">⌄</button>
+    <small style="letter-spacing:1px;color:var(--muted)">NOW PLAYING FULL SONG</small>
+    <button class="circle-btn" id="fullLikeBtn">♡</button>
+  </div>
+  <img class="big-cover" id="bigCover" alt="Artwork">
+  <div class="full-title" id="bigTitle">Select a track</div>
+  <div class="full-artist" id="bigArtist">RIVANSHH Hub</div>
+  <input class="seek" id="seek" type="range" min="0" max="1000" value="0">
+  <div class="times"><span id="elapsed">0:00</span><span id="duration">0:00</span></div>
+  <div class="controls">
+    <button id="fullPrev">⏮</button>
+    <button class="big-play" id="fullPlay">▶</button>
+    <button id="fullNext">⏭</button>
+  </div>
+  <div class="full-actions">
+    <button class="full-btn" id="fullAddToPlBtn">➕ Add to Playlist</button>
+    <button class="full-btn" id="fullDlBtn">⬇ Download MP3</button>
+  </div>
+</div>
+
+<!-- Account View Modal -->
+<div class="modal-overlay hidden" id="userModal">
+  <div class="modal-content">
+    <button class="btn-close" id="closeUserModal">✕</button>
+    <h3 style="margin-bottom:12px">My Account</h3>
+    <p style="font-size:12px;color:var(--muted)">Logged in as:</p>
+    <h4 id="userProfileName" style="color:var(--green);font-size:18px;margin:4px 0"></h4>
+    <p id="userProfileEmail" style="font-size:12px;color:var(--muted);margin-bottom:20px"></p>
+    <button class="gate-btn" id="btnLogout" style="background:#ff334b;color:#fff">Log Out</button>
+  </div>
+</div>
+
+<!-- Add To Playlist Modal -->
+<div class="modal-overlay hidden" id="addToPlModal">
+  <div class="modal-content">
+    <button class="btn-close" id="closeAddToPl">✕</button>
+    <h3 style="margin-bottom:12px">Add to Playlist</h3>
+    <div id="plChoiceList" class="results" style="max-height:220px;overflow-y:auto;margin-bottom:10px"></div>
+  </div>
+</div>
+
+<!-- Ad-Shield Video Player Modal -->
+<div class="yt-player-modal hidden" id="ytModal">
+  <div class="yt-modal-controls">
+    <div>
+      <button class="yt-nav-btn" id="ytPrev">⏮ Prev</button>
+      <button class="yt-nav-btn" id="ytNext">Next ⏭</button>
+    </div>
+    <button class="close-yt" id="closeYt">✕ Close</button>
+  </div>
+  <div class="yt-player-wrap">
+    <iframe id="ytIframe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+
+<audio id="audio" preload="auto" playsinline webkit-playsinline></audio>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const audio = $('audio');
+
+const API_BASE = 'https://api.riteshyt.in';
+const API_KEY = 'riteshfree900bfd96adabe73bae45f2a7';
+const fallbackArt = 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><defs><linearGradient id="g"><stop stop-color="#135c4b"/><stop offset="1" stop-color="#15263f"/></linearGradient></defs><rect width="300" height="300" rx="25" fill="url(#g)"/><text x="150" y="185" font-size="115" text-anchor="middle" fill="#39ed9a">♫</text></svg>');
+
+let currentUser = JSON.parse(localStorage.getItem('riv_user') || 'null');
+let playlists = JSON.parse(localStorage.getItem('riv_playlists') || '[]');
+let likedSongs = JSON.parse(localStorage.getItem('riv_liked') || '[]');
+let currentMode = 'music', tracks = [], currentIndex = -1, isSignUp = false, itemToAdd = null;
+
+function saveState(){
+  localStorage.setItem('riv_playlists', JSON.stringify(playlists));
+  localStorage.setItem('riv_liked', JSON.stringify(likedSongs));
+}
+function timeOf(s){
+  if(!Number.isFinite(s) || s < 0) return '0:00';
+  return Math.floor(s/60) + ':' + Math.floor(s%60).toString().padStart(2, '0');
+}
+function safeImg(img, src){
+  img.onerror = () => { img.onerror = null; img.src = fallbackArt; };
+  img.src = src || fallbackArt;
+}
+
+// ---------------------------------------------------------------------
+// 1. MANDATORY LOGIN GATE CONTROLLER
+// ---------------------------------------------------------------------
+function checkAuthGate(){
+  if(!currentUser){
+    $('accountGate').classList.remove('hidden');
+    $('mainApp').style.filter = 'blur(10px)';$('mainApp').style.pointerEvents = 'none';
+  } else {
+    $('accountGate').classList.add('hidden');
+    $('mainApp').style.filter = 'none';$('mainApp').style.pointerEvents = 'auto';
+  }
+}
+
+$('toggleGateMode').onclick = () => {
+  isSignUp = !isSignUp;
+  $('gateName').classList.toggle('hidden', !isSignUp);$('gateSubmitBtn').textContent = isSignUp ? 'Register & Enter App' : 'Sign In to Continue';
+  $('toggleGateMode').textContent = isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Create One (Sign Up)";
+};
+
+$('gateForm').onsubmit = (e) => {
+  e.preventDefault();
+  const email = $('gateEmail').value.trim();
+  const name = $('gateName').value.trim() || email.split('@')[0];
+  if(!email) return;
+
+  currentUser = { name, email };
+  localStorage.setItem('riv_user', JSON.stringify(currentUser));
+  checkAuthGate();
+};
+
+$('btnProfile').onclick = () => {
+  if(currentUser){
+    $('userProfileName').textContent = currentUser.name;
+    $('userProfileEmail').textContent = currentUser.email;
+    $('userModal').classList.remove('hidden');
+  } else {
+    checkAuthGate();
+  }
+};
+$('closeUserModal').onclick = () =>$('userModal').classList.add('hidden');
+
+$('btnLogout').onclick = () => {
+  currentUser = null;
+  localStorage.removeItem('riv_user');
+  audio.pause();
+  $('userModal').classList.add('hidden');
+  checkAuthGate();
+};
+
+// ---------------------------------------------------------------------
+// 2. DIRECT INSTANT PLAYABLE AUDIO STREAM (High-Bitrate MP3)
+// ---------------------------------------------------------------------
+function getStreamableAudioUrl(track){
+  if(track.directAudio && track.directAudio.length > 5){
+    return track.directAudio;
+  }
+  // Dual fallback engine for instant streaming
+  return `${API_BASE}/download?query=${encodeURIComponent(track.id || track.title)}&dl_type=audio&ext=mp3&api_key=${API_KEY}`;
+}
+
+// ---------------------------------------------------------------------
+// 3. SEARCH ENGINE (Hindi, Bhojpuri, Haryanvi, Punjabi, Marathi, etc.)
+// ---------------------------------------------------------------------
+async function searchMedia(queryText){
+  const q = (queryText || $('query').value).trim();
+  if(!q) return;
+  $('results').innerHTML = `<p class="msg">Searching "${q}" across servers...</p>`;
+
+  if(currentMode === 'music'){
+    // Fast JioSaavn Multi-Lingual API with Direct MP3 CDN
+    try {
+      const res = await fetch(`https://saavn.dev/api/search/songs?query=${encodeURIComponent(q)}&limit=15`);
+      const json = await res.json();
+      if(json.success && json.data && json.data.results && json.data.results.length > 0){
+        tracks = json.data.results.map(item => {
+          let directStream = '';
+          if(item.downloadUrl && item.downloadUrl.length > 0){
+            // 320kbps or 160kbps direct cdn mp3
+            directStream = item.downloadUrl[item.downloadUrl.length - 1].url || item.downloadUrl[0].url;
+          }
+          let img = fallbackArt;
+          if(item.image && item.image.length > 0){
+            img = item.image[item.image.length - 1].url || item.image[0].url;
+          }
+          return {
+            id: item.id,
+            title: item.name.replace(/&quot;/g, '"').replace(/&#039;/g, "'"),
+            channel: (item.artists && item.artists.primary && item.artists.primary[0]) ? item.artists.primary[0].name : 'Artist',
+            thumbnail: img,
+            directAudio: directStream
+          };
+        });
+      } else {
+        await fallbackAloneSearch(q);
+        return;
+      }
+    } catch(e) {
+      await fallbackAloneSearch(q);
+      return;
+    }
+  } else {
+    // RIVANSHHTUBE YouTube search
+    await fallbackAloneSearch(q);
+    return;
+  }
+  renderTracks();
+}
+
+async function fallbackAloneSearch(q){
+  try {
+    const res = await fetch(`${API_BASE}/search?q=${encodeURIComponent(q)}&limit=15&api_key=${API_KEY}`);
+    const json = await res.json();
+    const list = json.result || json.results || [];
+    if(list.length > 0){
+      tracks = list.map(item => ({
+        id: item.id || item.vidid,
+        title: item.title,
+        channel: item.channel || item.artist || 'Official',
+        thumbnail: item.thumbnail || `https://i.ytimg.com/vi/${item.id||item.vidid}/hqdefault.jpg`,
+        directAudio: `${API_BASE}/download?query=${encodeURIComponent(item.id||item.vidid)}&dl_type=audio&ext=mp3&api_key=${API_KEY}`
+      }));
+    }
+  } catch(err) {
+    console.warn("Search error:", err);
+  }
+  renderTracks();
+}
+
+// ---------------------------------------------------------------------
+// 4. RENDER TRACKS & VIDEO CARDS
+// ---------------------------------------------------------------------
+function renderTracks(){
+  const container = $('results');
+  container.innerHTML = '';
+  if(!tracks.length){ container.innerHTML = '<p class="msg">No results found. Type in search bar above.</p>'; return; }
+
+  tracks.forEach((track, idx) => {
+    const el = document.createElement('div');
+    const isLiked = likedSongs.some(s => (s.id || s.title) === (track.id || track.title));
+
+    if(currentMode === 'music'){
+      el.className = 'track';
+      el.innerHTML = `
+        <img class="cover" src="${track.thumbnail || fallbackArt}" alt="Cover">
+        <div class="info">
+          <div class="title">${track.title}</div>
+          <div class="artist">${track.channel} • Full Audio</div>
+        </div>
+        <div class="track-actions">
+          <button class="action-btn ${isLiked ? 'liked' : ''}" data-act="like">${isLiked ? '❤️' : '♡'}</button>
+          <button class="action-btn" data-act="pl">＋</button>
+          <button class="action-btn" data-act="dl">⬇</button>
+          <button class="action-btn play-btn" data-act="play">▶</button>
+        </div>
+      `;
+      el.querySelector('[data-act="like"]').onclick = (e) => { e.stopPropagation(); toggleLike(track); };
+      el.querySelector('[data-act="pl"]').onclick = (e) => { e.stopPropagation(); openAddToPlaylist(track); };
+      el.querySelector('[data-act="dl"]').onclick = (e) => { e.stopPropagation(); window.open(getStreamableAudioUrl(track), '_blank'); };
+      el.onclick = () => playSong(idx);
+    } else {
+      el.className = 'yt-card';
+      el.innerHTML = `
+        <div class="yt-thumb-wrap">
+          <img class="yt-thumb" src="${track.thumbnail || fallbackArt}" alt="Thumb">
+          <div class="yt-play-badge">▶</div>
+        </div>
+        <div class="yt-meta">
+          <div class="yt-text">
+            <div class="yt-title">${track.title}</div>
+            <div class="yt-channel">${track.channel} • Ad-Free</div>
+          </div>
+          <div class="yt-actions">
+            <button class="yt-btn-sub" data-act="vdl">⬇ MP4</button>
+            <button class="yt-btn-sub" data-act="vpl">＋</button>
+          </div>
+        </div>
+      `;
+      el.querySelector('[data-act="vdl"]').onclick = (e) => {
+        e.stopPropagation();
+        window.open(`${API_BASE}/download?query=${encodeURIComponent(track.id)}&dl_type=video&ext=mp4&api_key=${API_KEY}`, '_blank');
+      };
+      el.querySelector('[data-act="vpl"]').onclick = (e) => { e.stopPropagation(); openAddToPlaylist(track); };
+      el.querySelector('.yt-thumb-wrap').onclick = () => openVideo(idx);
+    }
+    container.appendChild(el);
+  });
+  $('count').textContent = tracks.length + (currentMode === 'music' ? ' full songs' : ' videos');
+}
+
+// ---------------------------------------------------------------------
+// 5. BULLETPROOF PLAYBACK, AUTOPLAY NEXT & LOCKSCREEN BACKGROUND
+// ---------------------------------------------------------------------
+async function playSong(idx){
+  if(idx < 0 || idx >= tracks.length) return;
+  currentIndex = idx;
+  const t = tracks[idx];
+  $('dock').classList.remove('hidden');
+  updatePlayerUI();
+
+  const streamUrl = getStreamableAudioUrl(t);
+  audio.pause();
+  audio.src = streamUrl;
+  audio.load();
+
+  try {
+    await audio.play();
+  } catch(err) {
+    console.warn("Retrying with fallback stream...");
+    audio.src = `${API_BASE}/download?query=${encodeURIComponent(t.title + ' ' + t.channel)}&dl_type=audio&ext=mp3&api_key=${API_KEY}`;
+    audio.load();
+    await audio.play().catch(e => console.log("Tap to play required by browser."));
+  }
+
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: t.title,
+      artist: t.channel,
+      album: 'RIVANSHH Hub',
+      artwork: [{ src: t.thumbnail || fallbackArt, sizes: '512x512', type: 'image/png' }]
+    });
+    navigator.mediaSession.setActionHandler('play', () => audio.play());
+    navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+    navigator.mediaSession.setActionHandler('previoustrack', () => nextSong(-1));
+    navigator.mediaSession.setActionHandler('nexttrack', () => nextSong(1));
+  }
+}
+
+function updatePlayerUI(){
+  const t = tracks[currentIndex];
+  if(!t) return;
+  $('miniTitle').textContent = t.title;
+  $('miniArtist').textContent = t.channel;
+  safeImg($('miniCover'), t.thumbnail);
+  $('bigTitle').textContent = t.title;
+  $('bigArtist').textContent = t.channel;
+  safeImg($('bigCover'), t.thumbnail);
+  $('miniPlay').textContent = audio.paused ? '▶' : '⏸';
+  $('fullPlay').textContent = audio.paused ? '▶' : '⏸';
+  $('fullLikeBtn').textContent = likedSongs.some(s => (s.id||s.title) === (t.id||t.title)) ? '❤️' : '♡';
+}
+
+function togglePlay(){
+  if(!audio.src && tracks.length) { playSong(0); return; }
+  if(audio.paused) audio.play();
+  else audio.pause();
+}
+
+function nextSong(step){
+  if(!tracks.length) return;
+  const next = (currentIndex + step + tracks.length) % tracks.length;
+  if(currentMode === 'music') playSong(next);
+  else openVideo(next);
+}
+
+// Spotify Continuous Play: Gana khtm hote hi agla song apne aap chalega
+audio.addEventListener('ended', () => nextSong(1));
+audio.addEventListener('play', updatePlayerUI);
+audio.addEventListener('pause', updatePlayerUI);
+audio.addEventListener('timeupdate', () => {
+  const d = audio.duration;
+  $('elapsed').textContent = timeOf(audio.currentTime);
+  $('duration').textContent = timeOf(d);
+  if(Number.isFinite(d) && d > 0){
+    $('seek').value = String(Math.round(audio.currentTime / d * 1000));
+    $('fill').style.width = (audio.currentTime / d * 100) + '%';
+  }
+});
+$('seek').oninput = () => {
+  if(Number.isFinite(audio.duration)) audio.currentTime = (Number($('seek').value) / 1000) * audio.duration;
+};
+
+// ---------------------------------------------------------------------
+// 6. AD-FREE VIDEO PLAYER MODAL
+// ---------------------------------------------------------------------
+function openVideo(idx){
+  if(idx < 0 || idx >= tracks.length) return;
+  currentIndex = idx;
+  audio.pause();
+  const vid = tracks[idx].id;
+  $('ytIframe').src = `https://www.youtube-nocookie.com/embed/${vid}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3`;
+  $('ytModal').classList.remove('hidden');
+}
+$('closeYt').onclick = () => { $('ytIframe').src = ''; $('ytModal').classList.add('hidden'); };
+$('ytPrev').onclick = () => nextSong(-1);
+$('ytNext').onclick = () => nextSong(1);
+
+// ---------------------------------------------------------------------
+// 7. PLAYLISTS & LIKES
+// ---------------------------------------------------------------------
+function toggleLike(track){
+  const id = track.id || track.title;
+  const exists = likedSongs.some(s => (s.id||s.title) === id);
+  if(exists) likedSongs = likedSongs.filter(s => (s.id||s.title) !== id);
+  else likedSongs.unshift(track);
+  saveState();
+  renderTracks();
+  if(currentIndex >= 0) updatePlayerUI();
+}
+
+function openAddToPlaylist(item){
+  itemToAdd = item;
+  const list = $('plChoiceList');
+  list.innerHTML = '';
+  if(!playlists.length){
+    list.innerHTML = '<p class="msg">No playlist yet. Create one in Library tab!</p>';
+  } else {
+    playlists.forEach(pl => {
+      const btn = document.createElement('button');
+      btn.className = 'chip'; btn.style.width = '100%'; btn.style.textAlign = 'left';
+      btn.textContent = `${pl.name} (${pl.items.length} items)`;
+      btn.onclick = () => {
+        pl.items.push(itemToAdd);
+        saveState();
+        $('addToPlModal').classList.add('hidden');
+        alert(`Added to playlist "${pl.name}"!`);
+      };
+      list.appendChild(btn);
+    });
+  }
+  $('addToPlModal').classList.remove('hidden');
+}
+$('closeAddToPl').onclick = () => $('addToPlModal').classList.add('hidden');
+
+$('btnCreatePl').onclick = () => {
+  const name = prompt('Enter Playlist Name:');
+  if(!name || !name.trim()) return;
+  playlists.push({ id: 'pl_' + Date.now(), name: name.trim(), items: [] });
+  saveState();
+  renderPlaylists();
+};
+
+function renderPlaylists(){
+  const container = $('playlistList');
+  container.innerHTML = '';
+  if(!playlists.length){ container.innerHTML = '<p class="msg">No playlists created yet.</p>'; return; }
+  playlists.forEach(pl => {
+    const card = document.createElement('div'); card.className = 'pl-card';
+    card.innerHTML = `
+      <div><b>${pl.name}</b><small style="display:block;color:var(--muted);margin-top:2px">${pl.items.length} items</small></div>
+      <button class="action-btn play-btn">▶</button>
+    `;
+    card.querySelector('.play-btn').onclick = () => {
+      if(!pl.items.length){ alert('Playlist is empty!'); return; }
+      tracks = pl.items.slice();
+      showPage('home');
+      playSong(0);
+    };
+    container.appendChild(card);
+  });
+}
+
+function renderLiked(){
+  const container = $('likedList');
+  container.innerHTML = '';
+  if(!likedSongs.length){ container.innerHTML = '<p class="msg">No liked items yet.</p>'; return; }
+  likedSongs.forEach((item, idx) => {
+    const card = document.createElement('div'); card.className = 'track';
+    card.innerHTML = `
+      <img class="cover" src="${item.thumbnail || fallbackArt}">
+      <div class="info"><b>${item.title}</b><small style="color:var(--muted);display:block">${item.channel}</small></div>
+      <button class="action-btn play-btn">▶</button>
+    `;
+    card.querySelector('.play-btn').onclick = () => {
+      tracks = likedSongs.slice();
+      showPage('home');
+      playSong(idx);
+    };
+    container.appendChild(card);
+  });
+}
+
+// ---------------------------------------------------------------------
+// 8. NAVIGATION, MODES & THEMES
+// ---------------------------------------------------------------------
+function showPage(page){
+  $('homePage').classList.toggle('hidden', page === 'library');
+  $('libraryPage').classList.toggle('hidden', page !== 'library');
+  $('homeTab').classList.toggle('active', page === 'home');
+  $('searchTab').classList.toggle('active', page === 'search');
+  $('libraryTab').classList.toggle('active', page === 'library');
+  if(page === 'search'){
+    $('homePage').classList.remove('hidden');
+    $('libraryPage').classList.add('hidden');
+    $('query').focus();
+  }
+  if(page === 'library') renderPlaylists();
+}
+
+$('homeTab').onclick = () => showPage('home');
+$('searchTab').onclick = () => showPage('search');
+$('libraryTab').onclick = () => showPage('library');
+
+$('tabPlaylists').onclick = () => {
+  $('tabPlaylists').className = 'lib-pill active'; $('tabLiked').className = 'lib-pill';
+  $('viewPlaylists').classList.remove('hidden'); $('viewLiked').classList.add('hidden');
+  renderPlaylists();
+};
+$('tabLiked').onclick = () => {
+  $('tabPlaylists').className = 'lib-pill'; $('tabLiked').className = 'lib-pill active';
+  $('viewPlaylists').classList.add('hidden'); $('viewLiked').classList.remove('hidden');
+  renderLiked();
+};
+
+$('btnModeMusic').onclick = () => {
+  currentMode = 'music';
+  $('btnModeMusic').className = 'portal-card music-active'; $('btnModeTube').className = 'portal-card';
+  $('mainLogo').className = 'logo'; $('mainLogo').textContent = '♫';
+  $('brandTitle').textContent = 'RIVANSHH MUSIC'; $('searchBtn').className = '';
+  $('heading').textContent = 'Discover Music (All Languages)';
+  $('query').placeholder = 'Search Hindi, Bhojpuri, Haryanvi, Punjabi, Marathi...';
+  setupChips(['Bollywood Hits', 'Bhojpuri Songs', 'Haryanvi Hits', 'Punjabi Top', 'Marathi Hits', 'Arijit Singh']);
+  searchMedia('Bollywood Hits');
+};
+
+$('btnModeTube').onclick = () => {
+  currentMode = 'tube';
+  audio.pause();
+  $('btnModeMusic').className = 'portal-card'; $('btnModeTube').className = 'portal-card yt-active';
+  $('mainLogo').className = 'logo yt-theme'; $('mainLogo').textContent = '▶';
+  $('brandTitle').textContent = 'RIVANSHHTUBE'; $('searchBtn').className = 'yt-btn';
+  $('heading').textContent = 'Trending YouTube Videos (Ad-Free)';
+  $('query').placeholder = 'Search any video on YouTube...';
+  setupChips(['Trending India', 'Music Videos', 'Gaming Free Fire', 'Podcasts', 'Comedy']);
+  searchMedia('Trending YouTube Videos');
+};
+
+function setupChips(list){
+  const c = $('chipsContainer'); c.innerHTML = '';
+  list.forEach((item, idx) => {
+    const btn = document.createElement('button');
+    btn.className = `chip ${currentMode==='tube'?'yt-chip':''} ${idx===0?'active':''}`;
+    btn.textContent = item;
+    btn.onclick = () => {
+      c.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      searchMedia(item);
+    };
+    c.appendChild(btn);
+  });
+}
+
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('riv_theme', t);
+  document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.getAttribute('data-t') === t));
+}
+
+// Global UI Handlers
+$('miniPlay').onclick = togglePlay;
+$('fullPlay').onclick = togglePlay;
+$('prev').onclick = () => nextSong(-1);
+$('next').onclick = () => nextSong(1);
+$('fullPrev').onclick = () => nextSong(-1);
+$('fullNext').onclick = () => nextSong(1);
+$('miniOpen').onclick = () => $('full').classList.remove('hidden');
+$('openPlayer').onclick = () => $('full').classList.remove('hidden');
+$('closeFull').onclick = () => $('full').classList.add('hidden');
+$('fullLikeBtn').onclick = () => { if(currentIndex >= 0) toggleLike(tracks[currentIndex]); };
+$('fullDlBtn').onclick = () => { if(currentIndex >= 0) window.open(getStreamableAudioUrl(tracks[currentIndex]), '_blank'); };
+
+$('searchBtn').onclick = () => searchMedia();
+$('query').onkeydown = (e) => { if(e.key === 'Enter') searchMedia(); };
+
+// Boot
+applyTheme(localStorage.getItem('riv_theme') || 'default');
+checkAuthGate();
+setupChips(['Bollywood Hits', 'Bhojpuri Songs', 'Haryanvi Hits', 'Punjabi Top', 'Marathi Hits', 'Arijit Singh']);
+searchMedia('Bollywood Hits');
+</script>
+</body>
+</html>
